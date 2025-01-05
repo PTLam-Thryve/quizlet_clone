@@ -22,7 +22,7 @@ class _AppState extends State<App> {
         lazy: false,
         child: MaterialApp(
           title: AppTexts.appName,
-          theme: appLightTheme,
+          theme: getLightTheme(),
           initialRoute: RouteNames.splash,
           onGenerateRoute: AppRouter.onGenerateRoute,
         ),
