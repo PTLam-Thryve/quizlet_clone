@@ -1,9 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:quizlet_clone/bloc/authentication_bloc/authentication_bloc_state.dart';
-import 'package:quizlet_clone/models/app_user.dart';
+import 'package:quizlet_clone/data/authentication_service.dart';
 
 /// A ChangeNotifier class that manages the authentication state of the application.
-class AuthenticationChangeNotifier extends ChangeNotifier {
+class AuthenticationBloc extends ChangeNotifier {
+  AuthenticationBloc(this._authenticationService);
+
+  final AuthenticationService _authenticationService;
+
   /// The current state of authentication.
   AuthenticationState _state = AuthenticationInitial();
 
@@ -16,20 +20,10 @@ class AuthenticationChangeNotifier extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await Future<void>.delayed(const Duration(seconds: 2));
-      final user = null;
-      if (user != null) {
-        _state = AuthenticationAuthenticated(
-          const AppUser(
-            uid: 'user.uid',
-            email: 'user.email',
-          ),
-        );
-      } else {
-        _state = AuthenticationInitial();
-      }
-    } catch (e) {
-      _state = AuthenticationError(e.toString());
+      final user = await _authenticationService.getCurrentUser();
+      _state = AuthenticationAuthenticated(user);
+    } on AuthenticationException catch (e) {
+      _state = AuthenticationError(e);
     } finally {
       notifyListeners();
     }
@@ -48,14 +42,13 @@ class AuthenticationChangeNotifier extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await Future<void>.delayed(const Duration(seconds: 2));
-      final user = AppUser(
-        uid: password,
+      final user = await _authenticationService.signUpWithEmailAndPassword(
         email: email,
+        password: password,
       );
       _state = AuthenticationAuthenticated(user);
-    } catch (e) {
-      _state = AuthenticationError(e.toString());
+    } on AuthenticationException catch (e) {
+      _state = AuthenticationError(e);
     } finally {
       notifyListeners();
     }

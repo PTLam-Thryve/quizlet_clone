@@ -1,3 +1,4 @@
+import 'package:quizlet_clone/data/authentication_service.dart';
 import 'package:quizlet_clone/models/app_user.dart';
 
 /// Base class for all authentication states.
@@ -27,8 +28,8 @@ class AuthenticationError extends AuthenticationState {
   /// Creates an instance of [AuthenticationError].
   ///
   /// [message] is the error message.
-  AuthenticationError(this.message);
+  AuthenticationError(this.error);
 
   /// The error message.
-  final String message;
+  final AuthenticationException error;
 }

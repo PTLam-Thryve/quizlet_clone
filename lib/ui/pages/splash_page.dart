@@ -16,15 +16,22 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  late final AuthenticationBloc _authenticationBloc;
+
   @override
   void initState() {
     super.initState();
+
+    // The post-frame callback is executed after the first frame is rendered.
+    // This ensures that the [context] is available for use.
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
+      (_) async {
         if (mounted) {
-          final authenticationBloc = context.read<AuthenticationChangeNotifier>()
+          _authenticationBloc = context.read<AuthenticationBloc>()
             ..addListener(_authenticationStatusListener);
-          unawaited(authenticationBloc.getCurrentUser());
+          // Add a delay to ensure the splash screen is visible for at least 1 second, enhancing user experience.
+          await Future<void>.delayed(const Duration(seconds: 1));
+          unawaited(_authenticationBloc.getCurrentUser());
         }
       },
     );
@@ -33,14 +40,13 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void dispose() {
     if (mounted) {
-      context.read<AuthenticationChangeNotifier>().removeListener(_authenticationStatusListener);
+      _authenticationBloc.removeListener(_authenticationStatusListener);
     }
     super.dispose();
   }
 
   void _authenticationStatusListener() {
-    final authenticationBloc = context.read<AuthenticationChangeNotifier>();
-    if (authenticationBloc.state.isAuthenticated) {
+    if (_authenticationBloc.state.isAuthenticated) {
       unawaited(Navigator.of(context).pushReplacementNamed(RouteNames.home));
     } else {
       unawaited(Navigator.of(context).pushReplacementNamed(RouteNames.signUp));
