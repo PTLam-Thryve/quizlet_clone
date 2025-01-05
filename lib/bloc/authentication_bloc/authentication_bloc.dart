@@ -9,7 +9,7 @@ class AuthenticationBloc extends ChangeNotifier {
   final AuthenticationService _authenticationService;
 
   /// The current state of authentication.
-  AuthenticationState _state = AuthenticationInitial();
+  AuthenticationState _state = AuthenticationUnauthenticated();
 
   /// Getter for the current authentication state.
   AuthenticationState get state => _state;
@@ -21,7 +21,11 @@ class AuthenticationBloc extends ChangeNotifier {
 
     try {
       final user = await _authenticationService.getCurrentUser();
-      _state = AuthenticationAuthenticated(user);
+      if (user == null) {
+        _state = AuthenticationUnauthenticated();
+      } else {
+        _state = AuthenticationAuthenticated(user);
+      }
     } on AuthenticationException catch (e) {
       _state = AuthenticationError(e);
     } finally {
@@ -69,7 +73,16 @@ class AuthenticationBloc extends ChangeNotifier {
 
   /// Signs out the current user.
   Future<void> signOut() async {
-    // TODO: Implement sign out
-    throw UnimplementedError();
+    _state = AuthenticationLoading();
+    notifyListeners();
+
+    try {
+      await _authenticationService.signOut();
+      _state = AuthenticationUnauthenticated();
+    } on AuthenticationException catch (e) {
+      _state = AuthenticationError(e);
+    } finally {
+      notifyListeners();
+    }
   }
 }

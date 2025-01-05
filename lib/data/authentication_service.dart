@@ -8,10 +8,10 @@ class AuthenticationService {
   /// Retrieves the currently authenticated user.
   ///
   /// Returns an [AppUser] if a user is authenticated, otherwise returns null.
-  Future<AppUser> getCurrentUser() async {
+  Future<AppUser?> getCurrentUser() async {
     final firebaseUser = _firebaseAuth.currentUser;
     if (firebaseUser == null) {
-      throw UnauthorizedException();
+      return null;
     }
 
     return AppUser.fromFirebaseUser(firebaseUser);
@@ -69,8 +69,13 @@ class AuthenticationService {
   ///
   /// Throws an [AuthenticationException] if the sign-out process fails.
   Future<void> signOut() async {
-    // TODO: Implement sign out
-    throw UnimplementedError();
+    try {
+      await _firebaseAuth.signOut();
+    } on FirebaseAuthException catch (e) {
+      throw AuthenticationException.fromFirebaseAuthException(e);
+    } catch (_) {
+      rethrow;
+    }
   }
 }
 
@@ -95,8 +100,6 @@ sealed class AuthenticationException implements Exception {
     }
   }
 }
-
-class UnauthorizedException extends AuthenticationException {}
 
 class UserNotFoundException extends AuthenticationException {}
 

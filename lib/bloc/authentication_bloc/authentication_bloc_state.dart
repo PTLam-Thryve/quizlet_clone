@@ -10,7 +10,7 @@ sealed class AuthenticationState {
 }
 
 /// Represents the initial state of authentication.
-class AuthenticationInitial extends AuthenticationState {}
+class AuthenticationUnauthenticated extends AuthenticationState {}
 
 /// Represents the loading state of authentication.
 class AuthenticationLoading extends AuthenticationState {}
@@ -38,8 +38,6 @@ class AuthenticationError extends AuthenticationState {
 
   String get errorMessage {
     switch (error) {
-      case UnauthorizedException():
-        return AppTexts.unauthorizedAccess;
       case UserNotFoundException():
         return AppTexts.userNotFound;
       case WrongEmailOrPasswordException():
