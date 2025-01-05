@@ -2,6 +2,39 @@
 
 ## Architecture Layers
 
+```mermaid
+---
+title: Architecture Layers
+---
+flowchart
+   User
+   subgraph App
+      subgraph UI
+         SignUpPage
+      end
+      UserModel(("AppUser (Model)"))
+      subgraph Business_Logic
+         SignUpBloc
+      end
+
+      subgraph Data
+         AuthenticationService
+      end
+      
+
+      UI -- "Call sign up business logic flow" --> Business_Logic
+      Business_Logic -- "As for data" --> Data
+      Business_Logic --> UserModel
+      UserModel -- "Send to UI" --> UI
+      Data --> Business_Logic
+   end
+   AuthenticationService -- "Send Request to Firebase" --------> Firebase[("Firebase")]
+   Firebase -- "Send Response to" ----> AuthenticationService
+    
+   User -- " Click on sign up button " ------> SignUpPage
+   SignUpPage -- " Show result to " -----> User
+```
+
 1. `UI` Layer
     - **Responsibilities**:
         - Receive user input and send it to the `business_logic` layer.
