@@ -1,9 +1,12 @@
 import 'package:quizlet_clone/data/authentication_service.dart';
 import 'package:quizlet_clone/models/app_user.dart';
+import 'package:quizlet_clone/ui/constants/app_texts.dart';
 
 /// Base class for all authentication states.
 sealed class AuthenticationState {
   bool get isAuthenticated => this is AuthenticationAuthenticated;
+
+  bool get isLoading => this is AuthenticationLoading;
 }
 
 /// Represents the initial state of authentication.
@@ -32,4 +35,23 @@ class AuthenticationError extends AuthenticationState {
 
   /// The error message.
   final AuthenticationException error;
+
+  String get errorMessage {
+    switch (error) {
+      case UnauthorizedException():
+        return AppTexts.unauthorizedAccess;
+      case UserNotFoundException():
+        return AppTexts.userNotFound;
+      case WrongEmailOrPasswordException():
+        return AppTexts.wrongEmailOrPassword;
+      case EmailAlreadyInUseException():
+        return AppTexts.emailAlreadyInUse;
+      case InvalidEmailException():
+        return AppTexts.invalidEmail;
+      case WeakPasswordException():
+        return AppTexts.weakPassword;
+      case GenericAuthException():
+        return AppTexts.unknownError;
+    }
+  }
 }

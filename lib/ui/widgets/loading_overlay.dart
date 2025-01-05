@@ -44,7 +44,9 @@ class LoadingOverlay extends StatelessWidget {
               child,
               if (isLoading)
                 Container(
-                  color: Theme.of(context).extension<ColorThemeExtension>()?.success,
+                  color: Theme.of(context)
+                      .extension<ColorThemeExtension>()
+                      ?.loadingOverlay,
                   child: const AppProgressIndicator(),
                 ),
             ],
