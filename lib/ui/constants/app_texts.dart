@@ -10,7 +10,6 @@ abstract base class AppTexts {
       'Please enter a valid email address';
   static const String passwordMustBeAtLeast6Characters =
       'Password must be at least 6 characters long';
-  static const String unauthorizedAccess = 'Unauthorized access.';
   static const String userNotFound = 'User not found.';
   static const String wrongEmailOrPassword = 'Wrong email or password.';
   static const String emailAlreadyInUse = 'Email is already in use.';
