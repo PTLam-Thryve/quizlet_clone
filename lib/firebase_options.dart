@@ -65,5 +65,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'quizlet-clone-f05aa.firebasestorage.app',
     iosBundleId: 'com.example.quizletClone',
   );
-
 }
