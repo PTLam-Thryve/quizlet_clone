@@ -1,6 +1,7 @@
 abstract base class AppTexts {
   static const String appName = 'Quizlet Clone';
   static const String signUp = 'Sign Up';
+  static const String signIn = 'Sign In';
   static const String notFound = 'Not Found';
   static const String email = 'Email';
   static const String password = 'Password';

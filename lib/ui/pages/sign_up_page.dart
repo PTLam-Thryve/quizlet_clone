@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:quizlet_clone/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:quizlet_clone/bloc/authentication_bloc/authentication_bloc_state.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
+import 'package:quizlet_clone/ui/pages/sign_in_page.dart';
 import 'package:quizlet_clone/ui/router/app_router.dart';
 import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
 import 'package:quizlet_clone/ui/widgets/forms/authorization_form.dart';
@@ -82,6 +83,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     onPressed: _onSignUpPressed,
                     isLoading: bloc.state.isLoading,
                   ),
+                  TextButton(onPressed: _onSignInPressed, child: const Text('Sign In'))
                 ],
               ),
             ),
@@ -96,6 +98,10 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       );
     }
+  }
+
+  Future<void> _onSignInPressed() async{
+    await Navigator.push(context, MaterialPageRoute(builder: (context)=> const SignInPage()));
   }
 
   String? _validateEmail(String? value) {
