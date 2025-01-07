@@ -64,30 +64,34 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) => Consumer<AuthenticationBloc>(
-      builder: (context, bloc, _) => LoadingOverlay(
-            isLoading: bloc.state.isLoading,
-            canPop: !bloc.state.isLoading,
-            child: Scaffold(
-              appBar: AppBar(
-                title: const Text(AppTexts.signUp),
-              ),
-              body: ListView(
-                padding: const EdgeInsets.all(16),
-                children: [
-                  AuthorizationForm(
-                    formKey: _formKey,
-                    emailController: _emailController,
-                    emailValidator: _validateEmail,
-                    passwordController: _passwordController,
-                    passwordValidator: _validatePassword,
-                    onPressed: _onSignUpPressed,
-                    isLoading: bloc.state.isLoading,
-                  ),
-                  TextButton(onPressed: _onSignInPressed, child: const Text('Sign In'))
-                ],
-              ),
+        builder: (context, bloc, _) => LoadingOverlay(
+          isLoading: bloc.state.isLoading,
+          canPop: !bloc.state.isLoading,
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text(AppTexts.signUp),
             ),
-          ));
+            body: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                AuthorizationForm(
+                  formKey: _formKey,
+                  emailController: _emailController,
+                  emailValidator: _validateEmail,
+                  passwordController: _passwordController,
+                  passwordValidator: _validatePassword,
+                  onPressed: _onSignUpPressed,
+                  isLoading: bloc.state.isLoading,
+                ),
+                TextButton(
+                  onPressed: _onSignInPressed,
+                  child: const Text(AppTexts.signIn),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
 
   void _onSignUpPressed() {
     if (_formKey.currentState?.validate() ?? false) {
@@ -100,8 +104,9 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  Future<void> _onSignInPressed() async{
-    await Navigator.push(context, MaterialPageRoute(builder: (context)=> const SignInPage()));
+  Future<void> _onSignInPressed() async {
+    await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => SignInPage()));
   }
 
   String? _validateEmail(String? value) {

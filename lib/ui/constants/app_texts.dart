@@ -18,4 +18,5 @@ abstract base class AppTexts {
   static const String weakPassword = 'Password is too weak.';
   static const String unknownError = 'An unknown error occurred.';
   static const String signUpSuccess = 'Signed up successfully.';
+  static const String signInSuccess = 'Signed in successfully';
 }
