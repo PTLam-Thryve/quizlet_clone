@@ -81,7 +81,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   passwordController: _passwordController,
                   passwordValidator: _validatePassword,
                   onPressed: _onSignUpPressed,
-                  isLoading: bloc.state.isLoading,
+                  isLoading: bloc.state.isLoading, buttonLabel: AppTexts.signUp,
                 ),
                 TextButton(
                   onPressed: _onSignInPressed,
@@ -105,8 +105,10 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> _onSignInPressed() async {
-    await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => SignInPage()));
+    //pushReplacement stops the Listener from SignUpPage to follow into the SignInPage
+    //causing both 'Signed In' and 'Signed Up' Snackbars to show up on successful sign in attempt
+    unawaited(Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const SignInPage())));
   }
 
   String? _validateEmail(String? value) {

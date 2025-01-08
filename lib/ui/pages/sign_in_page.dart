@@ -1,15 +1,65 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quizlet_clone/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:quizlet_clone/bloc/authentication_bloc/authentication_bloc_state.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
+import 'package:quizlet_clone/ui/pages/sign_up_page.dart';
+import 'package:quizlet_clone/ui/router/app_router.dart';
+import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
 import 'package:quizlet_clone/ui/widgets/forms/authorization_form.dart';
 
-class SignInPage extends StatelessWidget {
-  SignInPage({super.key});
+class SignInPage extends StatefulWidget {
+  const SignInPage({super.key});
 
+  @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
   late final AuthenticationBloc _authenticationBloc;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _authenticationBloc = context.read<AuthenticationBloc>()
+      ..addListener(_authenticationStatusListener);
+  }
+
+  @override
+  void dispose() {
+    _authenticationBloc.removeListener(_authenticationStatusListener);
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _authenticationStatusListener() {
+    switch (_authenticationBloc.state) {
+      case AuthenticationAuthenticated _:
+        showAppSnackBar(
+          context,
+          message: AppTexts.signInSuccess,
+          status: SnackBarStatus.success,
+        );
+        unawaited(Navigator.of(context).pushReplacementNamed(RouteNames.home));
+      case AuthenticationError errorState:
+        showAppSnackBar(
+          context,
+          message: errorState.errorMessage,
+          status: SnackBarStatus.error,
+        );
+      default:
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -25,36 +75,28 @@ class SignInPage extends StatelessWidget {
               emailValidator: _validateEmail,
               passwordController: _passwordController,
               passwordValidator: _validatePassword,
-              onPressed: () {
-                final password = _passwordController.text;
-                final email = _emailController.text;
-                final passwordValidationResult = _validatePassword(password);
-                final emailValidationResult = _validateEmail(email);
-                if(emailValidationResult != null){
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(emailValidationResult),
-                    ),
-                  );
-                }
-                else if (passwordValidationResult != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(passwordValidationResult),
-                    ),
-                  );
-                } else{
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(AppTexts.signInSuccess),
-                    ),
-                  );
-                }
-              },
+              onPressed: _onSignInPressed, buttonLabel: AppTexts.signIn,
             ),
+            TextButton(onPressed: _onSignUpPressed, child: const Text(AppTexts.signUp),),
           ],
         ),
       );
+
+  void _onSignInPressed(){
+    if (_formKey.currentState?.validate() ?? false) {
+      unawaited(
+        _authenticationBloc.signInWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        ),
+      );
+    }
+  }
+
+  Future<void> _onSignUpPressed() async {
+    unawaited(Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const SignUpPage())));
+  }
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {

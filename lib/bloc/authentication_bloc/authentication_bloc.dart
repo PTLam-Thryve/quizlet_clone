@@ -67,8 +67,20 @@ class AuthenticationBloc extends ChangeNotifier {
     required String email,
     required String password,
   }) async {
-    // TODO: Implement sign in with email and password
-    throw UnimplementedError();
+    _state = AuthenticationLoading();
+    notifyListeners();
+
+    try {
+      final user = await _authenticationService.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      _state = AuthenticationAuthenticated(user);
+    } on AuthenticationException catch (e) {
+      _state = AuthenticationError(e);
+    } finally {
+      notifyListeners();
+    }
   }
 
   /// Signs out the current user.
