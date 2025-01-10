@@ -105,7 +105,7 @@ sealed class AuthenticationException implements Exception {
     switch (firebaseAuthException.code) {
       case 'user-not-found':
         return UserNotFoundException();
-      case 'wrong-password' || 'wrong-email':
+      case 'invalid-credential' || 'wrong-password':
         return WrongEmailOrPasswordException();
       case 'email-already-in-use':
         return EmailAlreadyInUseException();
