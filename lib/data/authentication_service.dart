@@ -74,8 +74,6 @@ class AuthenticationService {
 
       return AppUser.fromFirebaseUser(firebaseUser);
     } on FirebaseAuthException catch (e) {
-      //TODO: Implement proper error message handling for sign in
-      debugPrint('FirebaseAuthException: ${e.code}');
       throw AuthenticationException.fromFirebaseAuthException(e);
     } catch (e) {
       rethrow;
