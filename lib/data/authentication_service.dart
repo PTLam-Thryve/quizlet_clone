@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+//import 'package:flutter/material.dart';
 import 'package:quizlet_clone/models/app_user.dart';
 
 /// A service that handles authentication using Firebase.
@@ -78,7 +78,6 @@ class AuthenticationService {
       debugPrint('FirebaseAuthException: ${e.code}');
       throw AuthenticationException.fromFirebaseAuthException(e);
     } catch (e) {
-      debugPrint('Unexpected error: $e');
       rethrow;
     }
   }
@@ -105,7 +104,7 @@ sealed class AuthenticationException implements Exception {
     switch (firebaseAuthException.code) {
       case 'user-not-found':
         return UserNotFoundException();
-      case 'wrong-password' || 'wrong-email':
+      case 'invalid-credential' || 'wrong-password':
         return WrongEmailOrPasswordException();
       case 'email-already-in-use':
         return EmailAlreadyInUseException();

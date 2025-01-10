@@ -9,6 +9,7 @@ import 'package:quizlet_clone/ui/pages/sign_up_page.dart';
 import 'package:quizlet_clone/ui/router/app_router.dart';
 import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
 import 'package:quizlet_clone/ui/widgets/forms/authorization_form.dart';
+import 'package:quizlet_clone/ui/widgets/loading_overlay.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -51,6 +52,7 @@ class _SignInPageState extends State<SignInPage> {
         );
         unawaited(Navigator.of(context).pushReplacementNamed(RouteNames.home));
       case AuthenticationError errorState:
+        print('Error from sign_in_page: ${errorState.error}');
         showAppSnackBar(
           context,
           message: errorState.errorMessage,
@@ -62,27 +64,37 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text(AppTexts.signIn),
-        ),
-        body: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            AuthorizationForm(
-              formKey: _formKey,
-              emailController: _emailController,
-              emailValidator: _validateEmail,
-              passwordController: _passwordController,
-              passwordValidator: _validatePassword,
-              onPressed: _onSignInPressed, buttonLabel: AppTexts.signIn,
+  Widget build(BuildContext context) => Consumer<AuthenticationBloc>(
+        builder: (context, bloc, _) => LoadingOverlay(
+          isLoading: bloc.state.isLoading,
+          canPop: !bloc.state.isLoading,
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text(AppTexts.signIn),
             ),
-            TextButton(onPressed: _onSignUpPressed, child: const Text(AppTexts.signUp),),
-          ],
+            body: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                AuthorizationForm(
+                  formKey: _formKey,
+                  emailController: _emailController,
+                  emailValidator: _validateEmail,
+                  passwordController: _passwordController,
+                  passwordValidator: _validatePassword,
+                  onPressed: _onSignInPressed,
+                  buttonLabel: AppTexts.signIn,
+                ),
+                TextButton(
+                  onPressed: _onSignUpPressed,
+                  child: const Text(AppTexts.signUp),
+                ),
+              ],
+            ),
+          ),
         ),
       );
 
-  void _onSignInPressed(){
+  void _onSignInPressed() {
     if (_formKey.currentState?.validate() ?? false) {
       unawaited(
         _authenticationBloc.signInWithEmailAndPassword(
