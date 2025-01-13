@@ -5,26 +5,26 @@ import 'package:provider/provider.dart';
 import 'package:quizlet_clone/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:quizlet_clone/bloc/authentication_bloc/authentication_bloc_state.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
-import 'package:quizlet_clone/ui/pages/sign_in_page.dart';
+import 'package:quizlet_clone/ui/pages/sign_up_page.dart';
 import 'package:quizlet_clone/ui/router/app_router.dart';
 import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
 import 'package:quizlet_clone/ui/widgets/forms/authorization_form.dart';
 import 'package:quizlet_clone/ui/widgets/loading_overlay.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({
-    super.key,
-  });
+class SignInPage extends StatefulWidget {
+  const SignInPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<SignInPage> createState() => _SignInPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignInPageState extends State<SignInPage> {
   late final AuthenticationBloc _authenticationBloc;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -47,11 +47,12 @@ class _SignUpPageState extends State<SignUpPage> {
       case AuthenticationAuthenticated _:
         showAppSnackBar(
           context,
-          message: AppTexts.signUpSuccess,
+          message: AppTexts.signInSuccess,
           status: SnackBarStatus.success,
         );
         unawaited(Navigator.of(context).pushReplacementNamed(RouteNames.home));
       case AuthenticationError errorState:
+        print('Error from sign_in_page: ${errorState.error}');
         showAppSnackBar(
           context,
           message: errorState.errorMessage,
@@ -69,7 +70,7 @@ class _SignUpPageState extends State<SignUpPage> {
           canPop: !bloc.state.isLoading,
           child: Scaffold(
             appBar: AppBar(
-              title: const Text(AppTexts.signUp),
+              title: const Text(AppTexts.signIn),
             ),
             body: ListView(
               padding: const EdgeInsets.all(16),
@@ -80,12 +81,12 @@ class _SignUpPageState extends State<SignUpPage> {
                   emailValidator: _validateEmail,
                   passwordController: _passwordController,
                   passwordValidator: _validatePassword,
-                  onPressed: _onSignUpPressed,
-                  isLoading: bloc.state.isLoading, buttonLabel: AppTexts.signUp,
+                  onPressed: _onSignInPressed,
+                  buttonLabel: AppTexts.signIn,
                 ),
                 TextButton(
-                  onPressed: _onSignInPressed,
-                  child: const Text(AppTexts.signIn),
+                  onPressed: _onSignUpPressed,
+                  child: const Text(AppTexts.signUp),
                 ),
               ],
             ),
@@ -93,10 +94,10 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       );
 
-  void _onSignUpPressed() {
+  void _onSignInPressed() {
     if (_formKey.currentState?.validate() ?? false) {
       unawaited(
-        _authenticationBloc.signUpWithEmailAndPassword(
+        _authenticationBloc.signInWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text,
         ),
@@ -104,11 +105,17 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  Future<void> _onSignInPressed() async {
-    //pushReplacement stops the Listener from SignUpPage to follow into the SignInPage
-    //causing both 'Signed In' and 'Signed Up' Snackbars to show up on successful sign in attempt
+  Future<void> _onSignUpPressed() async {
     unawaited(Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const SignInPage())));
+        context, MaterialPageRoute(builder: (context) => const SignUpPage())));
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return AppTexts.pleaseEnterPassword;
+    }
+
+    return null;
   }
 
   String? _validateEmail(String? value) {
@@ -119,18 +126,6 @@ class _SignUpPageState extends State<SignUpPage> {
     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
     if (!emailRegex.hasMatch(value)) {
       return AppTexts.pleaseEnterValidEmail;
-    }
-
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return AppTexts.pleaseEnterPassword;
-    }
-
-    if (value.length < 6) {
-      return AppTexts.passwordMustBeAtLeast6Characters;
     }
 
     return null;

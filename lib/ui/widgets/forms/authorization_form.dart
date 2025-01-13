@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quizlet_clone/ui/constants/app_texts.dart';
+//import 'package:quizlet_clone/ui/constants/app_texts.dart';
 import 'package:quizlet_clone/ui/widgets/forms/form_fields/email_form_field.dart';
 import 'package:quizlet_clone/ui/widgets/forms/form_fields/password_form_field.dart';
 
@@ -17,6 +17,7 @@ class AuthorizationForm extends StatelessWidget {
     required this.formKey,
     required this.emailController,
     required this.passwordController,
+    required this.buttonLabel,
     this.emailValidator,
     this.passwordValidator,
     this.onPressed,
@@ -45,6 +46,8 @@ class AuthorizationForm extends StatelessWidget {
   /// Indicates whether the form is in a loading state.
   final bool isLoading;
 
+  final String buttonLabel;
+
   @override
   Widget build(BuildContext context) => Form(
         key: formKey,
@@ -58,7 +61,7 @@ class AuthorizationForm extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: isLoading ? null : onPressed,
-              child: const Text(AppTexts.signUp),
+              child: Text(buttonLabel),
             ),
           ],
         ),
