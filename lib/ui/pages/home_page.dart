@@ -6,6 +6,7 @@ import 'package:quizlet_clone/bloc/authentication_bloc/authentication_bloc.dart'
 import 'package:quizlet_clone/ui/constants/app_icons.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
 import 'package:quizlet_clone/ui/router/app_router.dart';
+import 'package:quizlet_clone/ui/widgets/flash_card_set_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -51,8 +52,6 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         ),
-        body: const Center(
-          child: Text(AppTexts.appName),
-        ),
+        body: const FlashCardSetList(),
       );
 }
