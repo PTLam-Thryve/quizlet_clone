@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-class FlashCardSetListItem extends StatelessWidget {
-  const FlashCardSetListItem({required this.name, required this.colorHex, super.key});
+
+//Presents a tile of Flashcard from the the Flashcard Set
+class FlashCardSetListTile extends StatelessWidget {
+  const FlashCardSetListTile({required this.name, required this.colorHex, super.key});
   final String name;
   final String colorHex;
 
@@ -14,6 +16,8 @@ class FlashCardSetListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ListTile(
       title: Text(name),
-      tileColor: hexToColor(colorHex),
+      leading: CircleAvatar(
+        backgroundColor: hexToColor(colorHex),
+      )
     );
 }

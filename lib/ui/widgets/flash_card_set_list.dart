@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizlet_clone/bloc/flash_card_set_list_bloc.dart';
 import 'package:quizlet_clone/models/flash_card_set.dart';
-import 'package:quizlet_clone/ui/widgets/flash_card_set_list_item.dart';
+import 'package:quizlet_clone/ui/widgets/flash_card_set_list_tile.dart';
 
 class FlashCardSetList extends StatefulWidget {
   const FlashCardSetList({super.key});
@@ -29,10 +29,16 @@ class _FlashCardSetListState extends State<FlashCardSetList> {
             );
           } else {
             final flashCardSets = snapshot.data;
-            return ListView.builder(itemCount: flashCardSets!.length,itemBuilder: (context, index) => FlashCardSetListItem(
-                name: flashCardSets![index].name,
+            if(flashCardSets == null || flashCardSets.isEmpty){
+              return const Center(
+                child: Text('Flash Card Set is empty'),
+              );
+            }
+            return ListView.builder(itemCount: flashCardSets.length,itemBuilder: (context, index) => FlashCardSetListTile(
+                name: flashCardSets[index].name,
                 colorHex: flashCardSets[index].colorHex,
-              ));
+              ),
+            );
           }
         });
 }
