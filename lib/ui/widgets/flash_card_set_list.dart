@@ -12,7 +12,7 @@ class FlashCardSetList extends StatefulWidget {
 
 class _FlashCardSetListState extends State<FlashCardSetList> {
   Future<List<FlashCardSet>>? _flashCardSets;
-
+  //Initial state immidiately look for FlashCards
   @override
   void initState(){
     super.initState();
@@ -29,6 +29,7 @@ class _FlashCardSetListState extends State<FlashCardSetList> {
             );
           } else {
             final flashCardSets = snapshot.data;
+            //null check for the list of FlashCards
             if(flashCardSets == null || flashCardSets.isEmpty){
               return const Center(
                 child: Text('Flash Card Set is empty'),
