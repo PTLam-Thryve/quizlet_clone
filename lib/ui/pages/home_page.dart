@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizlet_clone/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:quizlet_clone/bloc/flash_card_set_list_bloc.dart';
 import 'package:quizlet_clone/ui/constants/app_icons.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
 import 'package:quizlet_clone/ui/router/app_router.dart';
@@ -17,6 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final AuthenticationBloc _authenticationBloc;
+  late final FlashCardSetListBloc _flashCardListBloc;
 
   @override
   void initState() {
@@ -25,6 +27,8 @@ class _HomePageState extends State<HomePage> {
       ..addListener(
         _authenticationStatusListener,
       );
+      _flashCardListBloc = FlashCardSetListBloc();
+      _flashCardListBloc.getFlashCardSets();
   }
 
   @override
@@ -42,16 +46,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text(AppTexts.appName),
-          actions: [
-            IconButton(
-              icon: const Icon(AppIcons.singOut),
-              onPressed: () => unawaited(_authenticationBloc.signOut()),
-            )
-          ],
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+    create: (_) => _flashCardListBloc,
+    child: Scaffold(
+          appBar: AppBar(
+            title: const Text(AppTexts.appName),
+            actions: [
+              IconButton(
+                icon: const Icon(AppIcons.singOut),
+                onPressed: () => unawaited(_authenticationBloc.signOut()),
+              )
+            ],
+          ),
+          body: FlashCardSetList(),
         ),
-        body: const FlashCardSetList(),
-      );
+  );
 }

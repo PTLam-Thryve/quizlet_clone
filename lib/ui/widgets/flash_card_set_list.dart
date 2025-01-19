@@ -1,45 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quizlet_clone/bloc/flash_card_set_list_bloc.dart';
-import 'package:quizlet_clone/models/flash_card_set.dart';
+import 'package:quizlet_clone/bloc/flash_card_set_list_bloc_state.dart';
 import 'package:quizlet_clone/ui/widgets/flash_card_set_list_tile.dart';
 
-class FlashCardSetList extends StatefulWidget {
-  const FlashCardSetList({super.key});
-
+class FlashCardSetList extends StatelessWidget {
   @override
-  State<FlashCardSetList> createState() => _FlashCardSetListState();
-}
-
-class _FlashCardSetListState extends State<FlashCardSetList> {
-  Future<List<FlashCardSet>>? _flashCardSets;
-  //Initial state immidiately look for FlashCards
-  @override
-  void initState(){
-    super.initState();
-    _flashCardSets = FlashCardSetListBloc().getFlashCard();
-  }
-
-  @override
-  Widget build(BuildContext context) => FutureBuilder(
-        future: _flashCardSets,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text('An error has ocurred: ${snapshot.error}'),
-            );
-          } else {
-            final flashCardSets = snapshot.data;
-            //null check for the list of FlashCards
-            if(flashCardSets == null || flashCardSets.isEmpty){
-              return const Center(
-                child: Text('Flash Card Set is empty'),
-              );
-            }
-            return ListView.builder(itemCount: flashCardSets.length,itemBuilder: (context, index) => FlashCardSetListTile(
-                name: flashCardSets[index].name,
-                colorHex: flashCardSets[index].colorHex,
+  Widget build(BuildContext context) =>
+      Consumer<FlashCardSetListBloc>(builder: (_, bloc, __) {
+        final state = bloc.state;
+        switch(state){
+          
+          case FlashCardSetListInitialState():
+            return const Center(child: CircularProgressIndicator());
+          case FlashCardSetListLoadingState():
+            return const Center(child: CircularProgressIndicator());
+          case FlashCardSetListSuccessState():
+            return ListView.builder(itemCount: state.flashCardSets.length,itemBuilder: (context, index) => FlashCardSetListTile(
+                name: state.flashCardSets[index].name,
+                colorHex: state.flashCardSets[index].colorHex,
               ),
             );
-          }
-        });
+          case FlashCardSetListErrorState():
+            return Center(
+              child: Text(state.errorMessage),
+            );
+        }
+      });
 }
