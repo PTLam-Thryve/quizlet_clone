@@ -5,6 +5,7 @@ import 'package:quizlet_clone/bloc/flash_card_set_list_bloc_state.dart';
 import 'package:quizlet_clone/ui/widgets/flash_card_set_list_tile.dart';
 
 class FlashCardSetList extends StatelessWidget {
+  const FlashCardSetList({super.key});
   @override
   Widget build(BuildContext context) =>
       Consumer<FlashCardSetListBloc>(builder: (_, bloc, __) {
