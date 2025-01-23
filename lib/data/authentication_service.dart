@@ -11,7 +11,7 @@ class AuthenticationService {
   /// Returns an [AppUser] if a user is authenticated, otherwise returns null.
   Future<AppUser?> getCurrentUser() async {
     final firebaseUser = _firebaseAuth.currentUser;
-    if (firebaseUser == null) {
+    if (firebaseUser == null) {//
       return null;
     }
 
