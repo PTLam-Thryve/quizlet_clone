@@ -19,4 +19,6 @@ abstract base class AppTexts {
   static const String unknownError = 'An unknown error occurred.';
   static const String signUpSuccess = 'Signed up successfully.';
   static const String signInSuccess = 'Signed in successfully';
+  static const String insufficientPermission = 'Access denied';
+  static const String internalError = 'An error has ocurred on the server';
 }
