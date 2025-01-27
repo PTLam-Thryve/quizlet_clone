@@ -16,14 +16,27 @@ class CreateFlashCardPage extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           children: [
             CreateFlashCardSetForm(
-                formKey: _formKey, nameController: _nameController),
+              formKey: _formKey,
+              nameController: _nameController,
+              nameValidator: _validateName,
+            ),
+            const SizedBox(height: 20),
             TextButton(
-              onPressed: (){
-                //TODO: Save entered card's data to Firebase
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  return;
+                }
               },
               child: const Text('Create'),
             ),
           ],
         ),
       );
+}
+
+String? _validateName(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Please enter a name';
+  }
+  return null;
 }

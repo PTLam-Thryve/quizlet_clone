@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizlet_clone/ui/widgets/forms/form_fields/color_picker_form.dart';
 import 'package:quizlet_clone/ui/widgets/forms/form_fields/flash_card_name_form.dart';
 
 class CreateFlashCardSetForm extends StatelessWidget {
@@ -6,14 +7,14 @@ class CreateFlashCardSetForm extends StatelessWidget {
     required this.formKey,
     required this.nameController,
     super.key,
-    this.validator,
+    this.nameValidator,
   });
 
   final GlobalKey<FormState> formKey;
 
   final TextEditingController nameController;
 
-  final FormFieldValidator<String>? validator;
+  final FormFieldValidator<String>? nameValidator;
 
   @override
   Widget build(BuildContext context) => Form(
@@ -23,8 +24,10 @@ class CreateFlashCardSetForm extends StatelessWidget {
           children: [
             FlashCardNameForm(
               nameController: nameController,
-              validator: validator,
+              validator: nameValidator,
             ),
+            const SizedBox(height: 16),
+            const ColorPickerForm(),
           ],
         ),
       ));
