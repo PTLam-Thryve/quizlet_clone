@@ -5,6 +5,7 @@ import 'package:quizlet_clone/ui/widgets/forms/form_fields/flash_card_name_form.
 class CreateFlashCardSetForm extends StatelessWidget {
   const CreateFlashCardSetForm({
     required this.formKey,
+    required this.colorHex,
     required this.nameController,
     super.key,
     this.nameValidator,
@@ -13,6 +14,8 @@ class CreateFlashCardSetForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
 
   final TextEditingController nameController;
+
+  final TextEditingController colorHex;
 
   final FormFieldValidator<String>? nameValidator;
 
@@ -27,7 +30,7 @@ class CreateFlashCardSetForm extends StatelessWidget {
               validator: nameValidator,
             ),
             const SizedBox(height: 16),
-            const ColorPickerForm(),
+            ColorPickerForm(colorHex: colorHex,),
           ],
         ),
       ));

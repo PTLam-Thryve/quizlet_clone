@@ -21,4 +21,5 @@ abstract base class AppTexts {
   static const String signInSuccess = 'Signed in successfully';
   static const String insufficientPermission = 'Access denied';
   static const String internalError = 'An error has ocurred on the server';
+  static const String createSuccess = 'Flashcard successfully added!';
 }

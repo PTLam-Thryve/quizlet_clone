@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class ColorPickerForm extends StatefulWidget {
-  const ColorPickerForm({super.key});
+  const ColorPickerForm({required this.colorHex, super.key});
+
+  final TextEditingController colorHex;
 
   @override
   State<ColorPickerForm> createState() => _ColorPickerFormState();

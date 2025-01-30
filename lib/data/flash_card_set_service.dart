@@ -20,6 +20,27 @@ class FlashCardSetService {
       rethrow;
     }
   }
+
+  Future<FlashCardSet> createFlashCardSet({
+    required String name,
+    required String colorHex,
+  }) async {
+    try {
+      final addedFlashCard = await _fireStore.collection('flashcard-sets').add({
+        'name': name,
+        'color': colorHex,
+      });
+      final retrievedFlashCard = await addedFlashCard.get();
+      return FlashCardSet(
+        name: retrievedFlashCard['name'].toString(),
+        colorHex: retrievedFlashCard['color'].toString(),
+      );
+    } on FirebaseException catch (error) {
+      throw FlashCardSetServiceException.fromFirebaseException(error);
+    } catch (error) {
+      rethrow;
+    }
+  }
 }
 
 //Class for handling Firestore related exceptions

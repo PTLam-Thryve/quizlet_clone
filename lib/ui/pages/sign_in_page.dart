@@ -52,7 +52,6 @@ class _SignInPageState extends State<SignInPage> {
         );
         unawaited(Navigator.of(context).pushReplacementNamed(RouteNames.home));
       case AuthenticationError errorState:
-        print('Error from sign_in_page: ${errorState.error}');
         showAppSnackBar(
           context,
           message: errorState.errorMessage,

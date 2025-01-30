@@ -1,3 +1,4 @@
+import 'package:color_hex/color_hex.dart';
 import 'package:flutter/material.dart';
 
 //Presents a tile of Flashcard from the the Flashcard Set
@@ -17,7 +18,7 @@ class FlashCardSetListTile extends StatelessWidget {
   Widget build(BuildContext context) => ListTile(
       title: Text(name),
       leading: CircleAvatar(
-        backgroundColor: hexToColor(colorHex),
+        backgroundColor: colorHex.convertToColor,
       )
     );
 }
