@@ -1,3 +1,4 @@
+import 'package:color_hex/color_hex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
@@ -14,7 +15,10 @@ class _ColorPickerFormState extends State<ColorPickerForm> {
   Color _currentColor = Colors.black;
 
   void _changeColor(Color color) {
-    setState(() => _currentColor = color);
+    setState((){
+      _currentColor = color;
+      widget.colorHex.text = color.convertToHex.hex!;
+    });
   }
 
   void _openColorPicker() {
@@ -32,7 +36,6 @@ class _ColorPickerFormState extends State<ColorPickerForm> {
           ElevatedButton(
         child: const Text('Done!'),
         onPressed: () {
-          _currentColor = _currentColor;
           Navigator.of(context).pop();
         },
       ),
