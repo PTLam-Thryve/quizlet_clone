@@ -31,10 +31,14 @@ class FlashCardSetService {
         'color': colorHex,
       });
       final retrievedFlashCard = await addedFlashCard.get();
+      if(!retrievedFlashCard.exists){
+        throw GenericFirestoreException();
+      } else{
       return FlashCardSet(
         name: retrievedFlashCard['name'].toString(),
         colorHex: retrievedFlashCard['color'].toString(),
       );
+    }
     } on FirebaseException catch (error) {
       throw FlashCardSetServiceException.fromFirebaseException(error);
     } catch (error) {
