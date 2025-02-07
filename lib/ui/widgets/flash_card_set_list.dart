@@ -10,17 +10,18 @@ class FlashCardSetList extends StatelessWidget {
   Widget build(BuildContext context) =>
       Consumer<FlashCardSetListBloc>(builder: (_, bloc, __) {
         final state = bloc.state;
-        switch(state){
-          
+        switch (state) {
           case FlashCardSetListInitialState():
             return const Center(child: CircularProgressIndicator());
           case FlashCardSetListLoadingState():
             return const Center(child: CircularProgressIndicator());
           case FlashCardSetListSuccessState():
-            return ListView.builder(itemCount: state.flashCardSets.length,itemBuilder: (context, index) => FlashCardSetListTile(
+            return ListView.builder(
+              itemCount: state.flashCardSets.length,
+              itemBuilder: (context, index) => FlashCardSetListTile(
                 name: state.flashCardSets[index].name,
                 colorHex: state.flashCardSets[index].colorHex,
-              ),
+              )
             );
           case FlashCardSetListErrorState():
             return Center(

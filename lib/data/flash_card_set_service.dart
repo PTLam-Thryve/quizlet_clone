@@ -11,6 +11,7 @@ class FlashCardSetService {
       final flashCardSets = getFromCollection.docs.map((doc) {
         final name = doc['name'].toString();
         final colorHex = doc['color'].toString();
+        final flashCardId = doc.id;
         return FlashCardSet(name: name, colorHex: colorHex);
       }).toList();
       return flashCardSets;
@@ -31,14 +32,39 @@ class FlashCardSetService {
         'color': colorHex,
       });
       final retrievedFlashCard = await addedFlashCard.get();
-      if(!retrievedFlashCard.exists){
+      if (!retrievedFlashCard.exists) {
         throw GenericFirestoreException();
-      } else{
-      return FlashCardSet(
-        name: retrievedFlashCard['name'].toString(),
-        colorHex: retrievedFlashCard['color'].toString(),
-      );
+      } else {
+        return FlashCardSet(
+          name: retrievedFlashCard['name'].toString(),
+          colorHex: retrievedFlashCard['color'].toString(),
+        );
+      }
+    } on FirebaseException catch (error) {
+      throw FlashCardSetServiceException.fromFirebaseException(error);
+    } catch (error) {
+      rethrow;
     }
+  }
+
+  Future<FlashCardSet> editFlashCardSet({
+    required String newName,
+    required String newColor,
+    required String flashCardId,
+  }) async {
+    try {
+      var collection = _fireStore.collection('flashcard-sets');
+      var querySnapshots = await collection.get();
+      for (final snapshot in querySnapshots.docs) {
+        var flashCardId = snapshot.id;
+        await collection.doc(flashCardId).update(
+        {
+          'name': newName,
+          'color': newColor,
+        },
+      );
+      }
+      return FlashCardSet(name: newName, colorHex: newColor);
     } on FirebaseException catch (error) {
       throw FlashCardSetServiceException.fromFirebaseException(error);
     } catch (error) {

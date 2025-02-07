@@ -2,23 +2,23 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quizlet_clone/bloc/create_bloc/create_flash_card_set_form_bloc.dart';
-import 'package:quizlet_clone/bloc/create_bloc/create_flash_card_set_form_bloc_state.dart';
+import 'package:quizlet_clone/bloc/edit_bloc/edit_flash_card_bloc.dart';
+import 'package:quizlet_clone/bloc/edit_bloc/edit_flash_card_bloc_state.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
 import 'package:quizlet_clone/ui/router/app_router.dart';
 import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
 import 'package:quizlet_clone/ui/widgets/forms/flash_card_set_form.dart';
 import 'package:quizlet_clone/ui/widgets/loading_overlay.dart';
 
-class CreateFlashCardPage extends StatefulWidget {
-  const CreateFlashCardPage({super.key});
+class EditFlashCardPage extends StatefulWidget {
+  const EditFlashCardPage({super.key});
 
   @override
-  State<CreateFlashCardPage> createState() => _CreateFlashCardPageState();
+  State<EditFlashCardPage> createState() => _EditFlashCardPageState();
 }
 
-class _CreateFlashCardPageState extends State<CreateFlashCardPage> {
-  late final CreateFlashCardSetFormBloc _createFlashCardBloc;
+class _EditFlashCardPageState extends State<EditFlashCardPage> {
+  late final EditFlashCardBloc _editFlashCardBloc;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
@@ -27,28 +27,28 @@ class _CreateFlashCardPageState extends State<CreateFlashCardPage> {
   @override
   void initState() {
     super.initState();
-    _createFlashCardBloc = context.read<CreateFlashCardSetFormBloc>()//Error with Provider
-      ..addListener(createFlashCardStatusListener);
+    _editFlashCardBloc = context.read<EditFlashCardBloc>()
+      ..addListener(editFlashCardStatusListener);
   }
 
   @override
   void dispose() {
-    _createFlashCardBloc.removeListener(createFlashCardStatusListener);
+    _editFlashCardBloc.removeListener(editFlashCardStatusListener);
     _nameController.dispose();
     _colorHexController.dispose();
     super.dispose();
   }
 
-  void createFlashCardStatusListener() {
-    switch (_createFlashCardBloc.state) {
-      case CreateFlashCardSuccessState _:
+  void editFlashCardStatusListener() {
+    switch (_editFlashCardBloc.state) {
+      case EditFlashCardSuccessState _:
         showAppSnackBar(
           context,
-          message: AppTexts.createSuccess,
+          message: AppTexts.editSuccess,
           status: SnackBarStatus.success,
         );
         unawaited(Navigator.of(context).pushReplacementNamed(RouteNames.home));
-      case CreateFlashCardErrorState errorState:
+      case EditFlashCardErrorState errorState:
         showAppSnackBar(
           context,
           message: errorState.errorMessage,
@@ -60,45 +60,38 @@ class _CreateFlashCardPageState extends State<CreateFlashCardPage> {
   }
 
   @override
-  Widget build(BuildContext context) => Consumer<CreateFlashCardSetFormBloc>(
+  Widget build(BuildContext context) => Consumer<EditFlashCardBloc>(
         builder: (context, bloc, _) => LoadingOverlay(
           isLoading: bloc.state.isLoading,
           canPop: !bloc.state.isLoading,
           child: Scaffold(
             appBar: AppBar(
-              title: const Text('Create your Flashcard'),
+              title: const Text('Edit your Flashcard'),
             ),
             body: ListView(
               padding: const EdgeInsets.all(16),
               children: [
                 FlashCardSetForm(
                   formKey: _formKey,
-                  nameController: _nameController,
-                  nameValidator: _validateName,
                   colorHex: _colorHexController,
-                  buttonLabel: AppTexts.create,
-                  onPressed: onCreatePressed,
-                ), 
+                  nameController: _nameController,
+                  buttonLabel: AppTexts.edit,
+                  onPressed: onEditPressed,
+                ),
               ],
             ),
           ),
         ),
       );
-  void onCreatePressed() {
+  void onEditPressed() {
     if (_formKey.currentState?.validate() ?? false) {
       unawaited(
-        _createFlashCardBloc.createFlashCardSet(
-          name: _nameController.text,
-          colorHex: _colorHexController.text,
+        _editFlashCardBloc.editFlashCardSet(
+          newName: _nameController.text,
+          newColor: _colorHexController.text,
+          flashCardId: '',
         ),
       );
     }
   }
-}
-
-String? _validateName(String? value) {
-  if (value == null || value.isEmpty) {
-    return 'Please enter a name';
-  }
-  return null;
 }
