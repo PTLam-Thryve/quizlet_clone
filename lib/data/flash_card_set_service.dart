@@ -5,6 +5,8 @@ class FlashCardSetService {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   Future<List<FlashCardSet>> getFlashCardSet() async {
+    //if nothing is getting fetched, please check and update the expiration date
+    //in the rule section of Firestore
     try {
       final getFromCollection =
           await _fireStore.collection('flashcard-sets').get();
