@@ -12,9 +12,11 @@ class EditFlashCardBloc extends ChangeNotifier {
 
   EditFlashCardBlocState get state => _state;
 
-  Future<void> editFlashCardSet(
-      {required String newName,
-      required String newColor, required String flashCardId}) async {
+  Future<void> editFlashCardSet({
+    required String newName,
+    required String newColor,
+    required String flashCardId,
+  }) async {
     _state = EditFlashCardLoadingState();
     notifyListeners();
     try {

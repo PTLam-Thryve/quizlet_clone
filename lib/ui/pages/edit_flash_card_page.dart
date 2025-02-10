@@ -11,7 +11,8 @@ import 'package:quizlet_clone/ui/widgets/forms/flash_card_set_form.dart';
 import 'package:quizlet_clone/ui/widgets/loading_overlay.dart';
 
 class EditFlashCardPage extends StatefulWidget {
-  const EditFlashCardPage({super.key});
+  const EditFlashCardPage({required this.flashCardId, super.key});
+  final String flashCardId;
 
   @override
   State<EditFlashCardPage> createState() => _EditFlashCardPageState();
@@ -89,7 +90,7 @@ class _EditFlashCardPageState extends State<EditFlashCardPage> {
         _editFlashCardBloc.editFlashCardSet(
           newName: _nameController.text,
           newColor: _colorHexController.text,
-          flashCardId: '',
+          flashCardId: widget.flashCardId,
         ),
       );
     }

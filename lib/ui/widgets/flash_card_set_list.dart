@@ -21,6 +21,7 @@ class FlashCardSetList extends StatelessWidget {
               itemBuilder: (context, index) => FlashCardSetListTile(
                 name: state.flashCardSets[index].name,
                 colorHex: state.flashCardSets[index].colorHex,
+                flashCardId: state.flashCardSets[index].id,
               )
             );
           case FlashCardSetListErrorState():

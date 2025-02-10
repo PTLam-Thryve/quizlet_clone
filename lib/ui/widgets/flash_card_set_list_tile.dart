@@ -10,10 +10,15 @@ import 'package:quizlet_clone/ui/pages/edit_flash_card_page.dart';
 
 //Presents a tile of Flashcard from the the Flashcard Set
 class FlashCardSetListTile extends StatelessWidget {
-  const FlashCardSetListTile(
-      {required this.name, required this.colorHex,super.key});
+  const FlashCardSetListTile({
+    required this.name,
+    required this.colorHex,
+    required this.flashCardId,
+    super.key,
+  });
   final String name;
   final String colorHex;
+  final String flashCardId;
 
   //Converts hex code to RGB color for Flutter
   Color hexToColor(String hexCode) => Color(
@@ -35,7 +40,9 @@ class FlashCardSetListTile extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => ChangeNotifierProvider(
                     create: (_) => EditFlashCardBloc(FlashCardSetService()),
-                    child: EditFlashCardPage(),
+                    child: EditFlashCardPage(
+                      flashCardId: flashCardId,
+                    ),
                   ),
                 ),
               ),
