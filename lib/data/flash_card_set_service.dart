@@ -5,13 +5,19 @@ class FlashCardSetService {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   Future<List<FlashCardSet>> getFlashCardSet() async {
+    //if nothing is getting fetched, please check and update the expiration date
+    //in the rule section of Firestore
     try {
       final getFromCollection =
           await _fireStore.collection('flashcard-sets').get();
       final flashCardSets = getFromCollection.docs.map((doc) {
         final name = doc['name'].toString();
         final colorHex = doc['color'].toString();
-        return FlashCardSet(name: name, colorHex: colorHex);
+        return FlashCardSet(
+          name: name,
+          colorHex: colorHex,
+          id: doc.id,
+        );
       }).toList();
       return flashCardSets;
     } on FirebaseException catch (error) {
@@ -31,14 +37,40 @@ class FlashCardSetService {
         'color': colorHex,
       });
       final retrievedFlashCard = await addedFlashCard.get();
-      if(!retrievedFlashCard.exists){
+      if (!retrievedFlashCard.exists) {
         throw GenericFirestoreException();
-      } else{
-      return FlashCardSet(
-        name: retrievedFlashCard['name'].toString(),
-        colorHex: retrievedFlashCard['color'].toString(),
-      );
+      } else {
+        return FlashCardSet(
+          name: retrievedFlashCard['name'].toString(),
+          colorHex: retrievedFlashCard['color'].toString(),
+          id: retrievedFlashCard.id,
+        );
+      }
+    } on FirebaseException catch (error) {
+      throw FlashCardSetServiceException.fromFirebaseException(error);
+    } catch (error) {
+      rethrow;
     }
+  }
+
+  Future<FlashCardSet> editFlashCardSet({
+    required String newName,
+    required String newColor,
+    required String flashCardId,
+  }) async {
+    try {
+      var collection = _fireStore.collection('flashcard-sets');
+      await collection.doc(flashCardId).update(
+        {
+          'name': newName,
+          'color': newColor,
+        },
+      );
+      return FlashCardSet(
+        name: newName,
+        colorHex: newColor,
+        id: flashCardId,
+      );
     } on FirebaseException catch (error) {
       throw FlashCardSetServiceException.fromFirebaseException(error);
     } catch (error) {

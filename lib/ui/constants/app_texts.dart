@@ -2,6 +2,8 @@ abstract base class AppTexts {
   static const String appName = 'Quizlet Clone';
   static const String signUp = 'Sign Up';
   static const String signIn = 'Sign In';
+  static const String create = 'Create';
+  static const String edit = 'Edit';
   static const String notFound = 'Not Found';
   static const String email = 'Email';
   static const String password = 'Password';
@@ -22,4 +24,5 @@ abstract base class AppTexts {
   static const String insufficientPermission = 'Access denied';
   static const String internalError = 'An error has ocurred on the server';
   static const String createSuccess = 'Flashcard successfully added!';
+  static const String editSuccess = 'Flashcard successfully edited';
 }
