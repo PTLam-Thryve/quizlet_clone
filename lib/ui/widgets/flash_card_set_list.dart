@@ -17,13 +17,22 @@ class FlashCardSetList extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           case FlashCardSetListSuccessState():
             return ListView.builder(
-              itemCount: state.flashCardSets.length,
-              itemBuilder: (context, index) => FlashCardSetListTile(
-                name: state.flashCardSets[index].name,
-                colorHex: state.flashCardSets[index].colorHex,
-                flashCardId: state.flashCardSets[index].id,
-              )
-            );
+                itemCount: state.flashCardSets.length,
+                itemBuilder: (context, index) => Dismissible(
+                      key: Key(state.flashCardSets[index].id),
+                      onDismissed: (direction) async {
+                        await bloc.deleteFlashCardSetById(
+                          name: state.flashCardSets[index].name,
+                          color: state.flashCardSets[index].colorHex,
+                          flashCardId: state.flashCardSets[index].id,
+                        );
+                      },
+                      child: FlashCardSetListTile(
+                        name: state.flashCardSets[index].name,
+                        colorHex: state.flashCardSets[index].colorHex,
+                        flashCardId: state.flashCardSets[index].id,
+                      ),
+                    ));
           case FlashCardSetListErrorState():
             return Center(
               child: Text(state.errorMessage),

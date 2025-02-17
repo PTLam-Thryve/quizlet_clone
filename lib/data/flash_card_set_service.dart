@@ -77,6 +77,26 @@ class FlashCardSetService {
       rethrow;
     }
   }
+
+  Future<FlashCardSet> deleteFlashCardSet({
+    required String name,
+    required String color,
+    required String flashCardId,
+  }) async {
+    try {
+      var collection = _fireStore.collection('flashcard-sets');
+      await collection.doc(flashCardId).delete();
+      return FlashCardSet(
+        name: name,
+        colorHex: color,
+        id: flashCardId,
+      );
+    } on FirebaseException catch (error) {
+      throw FlashCardSetServiceException.fromFirebaseException(error);
+    } catch (error) {
+      rethrow;
+    }
+  }
 }
 
 //Class for handling Firestore related exceptions
