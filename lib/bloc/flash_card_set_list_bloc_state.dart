@@ -21,7 +21,6 @@ class FlashCardSetListSuccessState extends FlashCardSetListState {
   final List<FlashCardSet> flashCardSets;
 }
 
-
 class FlashCardSetListErrorState extends FlashCardSetListState {
 
   FlashCardSetListErrorState(this.error);

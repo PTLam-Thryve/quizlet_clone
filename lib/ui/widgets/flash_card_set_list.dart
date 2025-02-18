@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizlet_clone/bloc/flash_card_set_list_bloc.dart';
 import 'package:quizlet_clone/bloc/flash_card_set_list_bloc_state.dart';
+import 'package:quizlet_clone/ui/constants/app_texts.dart';
+import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
 import 'package:quizlet_clone/ui/widgets/flash_card_set_list_tile.dart';
 
 class FlashCardSetList extends StatelessWidget {
   const FlashCardSetList({super.key});
+
   @override
   Widget build(BuildContext context) =>
       Consumer<FlashCardSetListBloc>(builder: (_, bloc, __) {
@@ -21,11 +24,24 @@ class FlashCardSetList extends StatelessWidget {
                 itemBuilder: (context, index) => Dismissible(
                       key: Key(state.flashCardSets[index].id),
                       onDismissed: (direction) async {
-                        await bloc.deleteFlashCardSetById(
-                          name: state.flashCardSets[index].name,
-                          color: state.flashCardSets[index].colorHex,
-                          flashCardId: state.flashCardSets[index].id,
-                        );
+                        if (state.flashCardSets[index].id.isNotEmpty) {
+                          showAppSnackBar(
+                            context,
+                            message: AppTexts.deleteSuccess,
+                            status: SnackBarStatus.success,
+                          );
+                          await bloc.deleteFlashCardSetById(
+                            name: state.flashCardSets[index].name,
+                            color: state.flashCardSets[index].colorHex,
+                            flashCardId: state.flashCardSets[index].id,
+                          );
+                        } else {
+                          showAppSnackBar(
+                            context,
+                            message: AppTexts.unknownError,
+                            status: SnackBarStatus.error,
+                          );
+                        }
                       },
                       child: FlashCardSetListTile(
                         name: state.flashCardSets[index].name,
