@@ -85,6 +85,9 @@ class FlashCardSetService {
   }) async {
     try {
       var collection = _fireStore.collection('flashcard-sets');
+      if(flashCardId.isEmpty){
+        throw ArgumentError('Flashcard ID is empty!');
+      }
       await collection.doc(flashCardId).delete();
       return FlashCardSet(
         name: name,
