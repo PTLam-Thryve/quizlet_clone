@@ -26,4 +26,5 @@ abstract base class AppTexts {
   static const String createSuccess = 'Flashcard set successfully added!';
   static const String editSuccess = 'Flashcard set successfully edited';
   static const String deleteSuccess = 'Flashcard set successfully deleted';
+  static const String deleteError = 'Flashcard set could not be deleted';
 }

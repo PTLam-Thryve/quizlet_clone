@@ -35,6 +35,12 @@ class FlashCardSetList extends StatelessWidget {
                             color: state.flashCardSets[index].colorHex,
                             flashCardId: state.flashCardSets[index].id,
                           );
+                        } else if (state.flashCardSets[index].id.isEmpty) {
+                          showAppSnackBar(
+                            context,
+                            message: AppTexts.deleteError,
+                            status: SnackBarStatus.error,
+                          );
                         } else {
                           showAppSnackBar(
                             context,
