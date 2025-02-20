@@ -10,7 +10,6 @@ import 'package:quizlet_clone/ui/constants/app_icons.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
 import 'package:quizlet_clone/ui/pages/create_flash_card_page.dart';
 import 'package:quizlet_clone/ui/router/app_router.dart';
-import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
 import 'package:quizlet_clone/ui/widgets/flash_card_set_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,7 +30,7 @@ class _HomePageState extends State<HomePage> {
       ..addListener(
         _authenticationStatusListener,
       );
-    _flashCardListBloc = FlashCardSetListBloc();
+    _flashCardListBloc = FlashCardSetListBloc(FlashCardSetService());
     _flashCardListBloc.getFlashCardSets();
   }
 

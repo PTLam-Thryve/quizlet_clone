@@ -21,40 +21,42 @@ class FlashCardSetList extends StatelessWidget {
           case FlashCardSetListSuccessState():
             return ListView.builder(
                 itemCount: state.flashCardSets.length,
-                itemBuilder: (context, index) => Dismissible(
-                      key: Key(state.flashCardSets[index].id),
-                      onDismissed: (direction) async {
-                        if (state.flashCardSets[index].id.isNotEmpty) {
+                itemBuilder: (context, index) =>Dismissible(
+                    key: Key(state.flashCardSets[index].id),
+                    onDismissed: (direction) async {
+                      print('Dismissible triggered');
+                      try {
+                        await bloc.deleteFlashCardSetById(
+                          name: state.flashCardSets[index].name,
+                          color: state.flashCardSets[index].colorHex,
+                          flashCardId: state.flashCardSets[index].id,
+                        );
+                        if(context.mounted){
+                          print('SnackBar is shown');
                           showAppSnackBar(
-                            context,
-                            message: AppTexts.deleteSuccess,
-                            status: SnackBarStatus.success,
-                          );
-                          await bloc.deleteFlashCardSetById(
-                            name: state.flashCardSets[index].name,
-                            color: state.flashCardSets[index].colorHex,
-                            flashCardId: state.flashCardSets[index].id,
-                          );
-                        } else if (state.flashCardSets[index].id.isEmpty) {
-                          showAppSnackBar(
-                            context,
-                            message: AppTexts.deleteError,
-                            status: SnackBarStatus.error,
-                          );
-                        } else {
-                          showAppSnackBar(
-                            context,
-                            message: AppTexts.unknownError,
-                            status: SnackBarStatus.error,
-                          );
+                          context,
+                          message: AppTexts.deleteSuccess,
+                          status: SnackBarStatus.success,
+                        );
                         }
-                      },
-                      child: FlashCardSetListTile(
-                        name: state.flashCardSets[index].name,
-                        colorHex: state.flashCardSets[index].colorHex,
-                        flashCardId: state.flashCardSets[index].id,
-                      ),
-                    ));
+                      } catch (e) {
+                        if(context.mounted){
+                          print('uh oh');
+                          showAppSnackBar(
+                          context,
+                          message: AppTexts.deleteError,
+                          status: SnackBarStatus.error,
+                        );
+                        }
+                      }
+                    },
+                    child: FlashCardSetListTile(
+                      name: state.flashCardSets[index].name,
+                      colorHex: state.flashCardSets[index].colorHex,
+                      flashCardId: state.flashCardSets[index].id,
+                    ),
+                  ),
+                );
           case FlashCardSetListErrorState():
             return Center(
               child: Text(state.errorMessage),
