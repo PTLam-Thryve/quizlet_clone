@@ -4,6 +4,7 @@ import 'package:quizlet_clone/data/flash_card_set_service.dart';
 
 class FlashCardSetListBloc extends ChangeNotifier {
   FlashCardSetListBloc(this._flashCardSetService);
+
   FlashCardSetListState _state = FlashCardSetListInitialState();
 
   /// Getter for the current flashCardSetList state.
@@ -16,9 +17,8 @@ class FlashCardSetListBloc extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final flashCardSetReceived =
-          await _flashCardSetService.getFlashCardSet();
-      _state = FlashCardSetListSuccessState(flashCardSetReceived);
+      final flashCardSetReceived = await _flashCardSetService.getFlashCardSet();
+      _state = FlashCardSetListSuccessState(flashCardSets: flashCardSetReceived);
     } on FlashCardSetServiceException catch (e) {
       _state = FlashCardSetListErrorState(e);
     } finally {
@@ -31,6 +31,7 @@ class FlashCardSetListBloc extends ChangeNotifier {
     required String color,
     required String flashCardId,
   }) async {
+    final cachedSuccessState = _state as FlashCardSetListSuccessState;
     _state = FlashCardSetListLoadingState();
     notifyListeners();
 
@@ -40,11 +41,17 @@ class FlashCardSetListBloc extends ChangeNotifier {
         color: color,
         flashCardId: flashCardId,
       );
-      final flashCardSetReceived =
-          await _flashCardSetService.getFlashCardSet();
-      _state = FlashCardSetListSuccessState(flashCardSetReceived);
+      final flashCardSetReceived = await _flashCardSetService.getFlashCardSet();
+      _state = FlashCardSetListSuccessState(
+        flashCardSets: flashCardSetReceived,
+        isFirstLoad: false,
+      );
     } on FlashCardSetServiceException catch (e) {
-      _state = FlashCardSetListErrorState(e);
+      _state = FlashCardSetListSuccessState(
+        flashCardSets: cachedSuccessState.flashCardSets,
+        deletionError: e,
+        isFirstLoad: false,
+      );
     } finally {
       notifyListeners();
     }
