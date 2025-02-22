@@ -23,6 +23,8 @@ abstract base class AppTexts {
   static const String signInSuccess = 'Signed in successfully';
   static const String insufficientPermission = 'Access denied';
   static const String internalError = 'An error has ocurred on the server';
-  static const String createSuccess = 'Flashcard successfully added!';
-  static const String editSuccess = 'Flashcard successfully edited';
+  static const String createSuccess = 'Flashcard set successfully added!';
+  static const String editSuccess = 'Flashcard set successfully edited';
+  static const String deleteSuccess = 'Flashcard set successfully deleted';
+  static const String deleteError = 'Flashcard set could not be deleted';
 }

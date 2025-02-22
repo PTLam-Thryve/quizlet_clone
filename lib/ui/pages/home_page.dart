@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
       ..addListener(
         _authenticationStatusListener,
       );
-    _flashCardListBloc = FlashCardSetListBloc();
+    _flashCardListBloc = FlashCardSetListBloc(FlashCardSetService());
     _flashCardListBloc.getFlashCardSets();
   }
 
@@ -68,7 +68,8 @@ class _HomePageState extends State<HomePage> {
               unawaited(Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => ChangeNotifierProvider(
-                    create: (_) => CreateFlashCardSetFormBloc(FlashCardSetService()),
+                    create: (_) =>
+                        CreateFlashCardSetFormBloc(FlashCardSetService()),
                     child: CreateFlashCardPage(),
                   ),
                 ),
