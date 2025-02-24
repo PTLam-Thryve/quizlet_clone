@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:quizlet_clone/bloc/flash_card_set_list_bloc.dart';
 import 'package:quizlet_clone/bloc/flash_card_set_list_bloc_state.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
+import 'package:quizlet_clone/ui/pages/flashcardset_detail_page.dart';
 import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
 import 'package:quizlet_clone/ui/widgets/flash_card_set_list_tile.dart';
 
@@ -27,7 +28,8 @@ class _FlashCardSetListState extends State<FlashCardSetList> {
 
   @override
   void dispose() {
-    _flashCardSetListBloc.removeListener(_flashCardSetListBlocDeletionResultListener);
+    _flashCardSetListBloc
+        .removeListener(_flashCardSetListBlocDeletionResultListener);
     super.dispose();
   }
 
@@ -39,7 +41,8 @@ class _FlashCardSetListState extends State<FlashCardSetList> {
           return;
         }
 
-        final hasNoDeletionError = flashCardSetListSuccessState.deletionError == null;
+        final hasNoDeletionError =
+            flashCardSetListSuccessState.deletionError == null;
         if (hasNoDeletionError) {
           showAppSnackBar(
             context,
@@ -60,7 +63,8 @@ class _FlashCardSetListState extends State<FlashCardSetList> {
   }
 
   @override
-  Widget build(BuildContext context) => Consumer<FlashCardSetListBloc>(builder: (_, bloc, __) {
+  Widget build(BuildContext context) =>
+      Consumer<FlashCardSetListBloc>(builder: (_, bloc, __) {
         final state = bloc.state;
         switch (state) {
           case FlashCardSetListInitialState():
@@ -79,10 +83,22 @@ class _FlashCardSetListState extends State<FlashCardSetList> {
                     flashCardId: state.flashCardSets[index].id,
                   ));
                 },
-                child: FlashCardSetListTile(
-                  name: state.flashCardSets[index].name,
-                  colorHex: state.flashCardSets[index].colorHex,
-                  flashCardId: state.flashCardSets[index].id,
+                child: InkWell(
+                  onTap: () {
+                    unawaited(
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => FlashcardSetDetailPage(
+                                  flashCardId: state.flashCardSets[index].id,
+                                )),
+                      ),
+                    );
+                  },
+                  child: FlashCardSetListTile(
+                    name: state.flashCardSets[index].name,
+                    colorHex: state.flashCardSets[index].colorHex,
+                    flashCardId: state.flashCardSets[index].id,
+                  ),
                 ),
               ),
             );
