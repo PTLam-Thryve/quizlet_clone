@@ -27,7 +27,7 @@ class _CreateFlashCardPageState extends State<CreateFlashCardPage> {
   @override
   void initState() {
     super.initState();
-    _createFlashCardBloc = context.read<CreateFlashCardSetFormBloc>()//Error with Provider
+    _createFlashCardBloc = context.read<CreateFlashCardSetFormBloc>()
       ..addListener(createFlashCardStatusListener);
   }
 

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizlet_clone/bloc/flash_card_set_list_bloc.dart';
 import 'package:quizlet_clone/bloc/flash_card_set_list_bloc_state.dart';
+import 'package:quizlet_clone/bloc/flashcard_list_bloc/flashcard_list_bloc.dart';
+import 'package:quizlet_clone/data/flashcard_service.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
 import 'package:quizlet_clone/ui/pages/flashcardset_detail_page.dart';
 import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
@@ -88,9 +90,12 @@ class _FlashCardSetListState extends State<FlashCardSetList> {
                     unawaited(
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (context) => FlashcardSetDetailPage(
-                                  flashCardId: state.flashCardSets[index].id,
-                                )),
+                            builder: (context) => ChangeNotifierProvider(
+                              create: (_) => FlashCardListBloc(FlashCardService()),
+                              child: FlashCardSetDetailPage(
+                                    id: state.flashCardSets[index].id,
+                                  ),
+                            )),
                       ),
                     );
                   },
