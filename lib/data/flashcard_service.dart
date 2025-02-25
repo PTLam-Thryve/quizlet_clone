@@ -18,15 +18,15 @@ class FlashCardService{
       }).toList();
       return flashcards;
     } on FirebaseException catch(error){
-      throw FlashcardServiceException.fromFirebaseException(error);
+      throw FlashCardServiceException.fromFirebaseException(error);
     } catch(error){
       rethrow;
     }
   }
 }
 
-sealed class FlashcardServiceException implements Exception {
-  static FlashcardServiceException fromFirebaseException(
+sealed class FlashCardServiceException implements Exception {
+  static FlashCardServiceException fromFirebaseException(
       FirebaseException firebaseException) {
     switch (firebaseException.code) {
       case 'insufficient-permission':
@@ -39,8 +39,8 @@ sealed class FlashcardServiceException implements Exception {
   }
 }
 
-class InsufficientPermissionException extends FlashcardServiceException {}
+class InsufficientPermissionException extends FlashCardServiceException {}
 
-class InternalErrorException extends FlashcardServiceException {}
+class InternalErrorException extends FlashCardServiceException{}
 
-class GenericFirestoreException extends FlashcardServiceException {}
+class GenericFirestoreException extends FlashCardServiceException {}
