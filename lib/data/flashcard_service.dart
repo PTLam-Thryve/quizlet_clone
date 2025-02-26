@@ -2,7 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quizlet_clone/models/flashcard.dart';
 
 class FlashCardService{
-  FlashCardService(this.flashCardSetid);
+  FlashCardService(this.flashCardSetid){
+    if(flashCardSetid.isEmpty){
+      throw ArgumentError('FlashCardSetid is empty!');
+    }
+  }
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final String flashCardSetid;
 
