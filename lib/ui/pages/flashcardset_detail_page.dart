@@ -5,9 +5,9 @@ import 'package:quizlet_clone/data/flashcard_service.dart';
 import 'package:quizlet_clone/ui/widgets/flashcard_list.dart';
 
 class FlashCardSetDetailPage extends StatefulWidget {
-  const FlashCardSetDetailPage({required this.id, super.key});
+  const FlashCardSetDetailPage({required this.flashCardSetid, super.key});
 
-  final id;
+  final String flashCardSetid;
 
   @override
   State<FlashCardSetDetailPage> createState() => _FlashCardSetDetailPageState();
@@ -18,7 +18,7 @@ class _FlashCardSetDetailPageState extends State<FlashCardSetDetailPage> {
   @override
   void initState() {
     super.initState();
-    _flashCardListBloc = FlashCardListBloc(FlashCardService());
+    _flashCardListBloc = FlashCardListBloc(FlashCardService(widget.flashCardSetid));
     _flashCardListBloc.getFlashcards();
   }
 
