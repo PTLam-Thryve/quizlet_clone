@@ -91,9 +91,9 @@ class _FlashCardSetListState extends State<FlashCardSetList> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (context) => ChangeNotifierProvider(
-                              create: (_) => FlashCardListBloc(FlashCardService()),
+                              create: (_) => FlashCardListBloc(FlashCardService(state.flashCardSets[index].id)),
                               child: FlashCardSetDetailPage(
-                                    id: state.flashCardSets[index].id,
+                                    flashCardSetid: state.flashCardSets[index].id,
                                   ),
                             )),
                       ),

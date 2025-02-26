@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quizlet_clone/models/flashcard.dart';
 
 class FlashCardService{
+  FlashCardService(this.flashCardSetid);
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  final String flashCardSetid;
 
   Future<List<Flashcard>> getFlashcards() async{
     try{
-      final getFromCollection = await _fireStore.collection('flashcard').get();
+      final getFromCollection = await _fireStore.collection('flashcard-sets').doc(flashCardSetid).collection('flashcards').get();
       final flashcards = getFromCollection.docs.map((doc){
         final question = doc['question'].toString();
         final answer = doc['answer'].toString();
