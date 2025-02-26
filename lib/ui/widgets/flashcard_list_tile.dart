@@ -16,11 +16,13 @@ class FlashcardListTile extends StatelessWidget {
   Widget build(BuildContext context) => ListTile(
         title: Text(
           question,
-          style: TextStyle(fontSize: 20),
+          style: const TextStyle(fontSize: 20),
+          overflow: TextOverflow.ellipsis,
         ),
         trailing: Text(
           answer,
-          style: TextStyle(fontSize: 20),
+          style: const TextStyle(fontSize: 20),
+          overflow: TextOverflow.ellipsis,
         ),
       );
 }

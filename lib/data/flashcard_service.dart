@@ -14,8 +14,8 @@ class FlashCardService{
     try{
       final getFromCollection = await _fireStore.collection('flashcard-sets').doc(flashCardSetid).collection('flashcards').get();
       final flashcards = getFromCollection.docs.map((doc){
-        final question = doc['question'].toString();
-        final answer = doc['answer'].toString();
+        final question = doc.data().containsKey('question')?doc['question'].toString():'';
+        final answer = doc.data().containsKey('answer')?doc['answer'].toString():'';
         return Flashcard(
           answer: answer,
           question: question,
