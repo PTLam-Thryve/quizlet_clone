@@ -18,8 +18,8 @@ class _FlashCardSetDetailPageState extends State<FlashCardSetDetailPage> {
   @override
   void initState() {
     super.initState();
-    _flashCardListBloc = FlashCardListBloc(FlashCardService(widget.flashCardSetid));
-    _flashCardListBloc.getFlashcards();
+    _flashCardListBloc = FlashCardListBloc(FlashCardService());
+    _flashCardListBloc.getFlashcards(widget.flashCardSetid);
   }
 
   @override
