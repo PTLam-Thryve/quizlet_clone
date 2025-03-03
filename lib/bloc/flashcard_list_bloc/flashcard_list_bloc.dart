@@ -11,12 +11,12 @@ class FlashCardListBloc extends ChangeNotifier{
 
   final FlashCardService _flashCardService;
 
-  Future<void> getFlashcards() async{
+  Future<void> getFlashcards(final String flashCardSetid) async{
     _state = FlashCardListLoadingState();
     notifyListeners();
 
     try{
-      final flashCardsReceived = await _flashCardService.getFlashcards();
+      final flashCardsReceived = await _flashCardService.getFlashcards(flashCardSetid);
       _state = FlashCardListSuccessState(flashCardsReceived);
     } on FlashCardServiceException catch(e){
       _state = FlashCardListErrorState(e);
