@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quizlet_clone/bloc/create_bloc/create_flashcard_form_bloc.dart';
 import 'package:quizlet_clone/bloc/flashcard_list_bloc/flashcard_list_bloc.dart';
 import 'package:quizlet_clone/data/flashcard_service.dart';
+import 'package:quizlet_clone/ui/pages/create_flashcard_page.dart';
 import 'package:quizlet_clone/ui/widgets/flashcard_list.dart';
 
 class FlashCardSetDetailPage extends StatefulWidget {
@@ -29,12 +33,26 @@ class _FlashCardSetDetailPageState extends State<FlashCardSetDetailPage> {
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
-    create: (_) => _flashCardListBloc,
-    child: Scaffold(
+        create: (_) => _flashCardListBloc,
+        child: Scaffold(
           appBar: AppBar(
             title: const Text('Flashcard Detail Page'),
           ),
           body: FlashcardList(),
+          floatingActionButton: FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () {
+              unawaited(Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ChangeNotifierProvider(
+                    create: (_) => CreateFlashcardFormBloc(FlashCardService()),
+                    child: CreateFlashcardPage(
+                        flashCardSetId: widget.flashCardSetid),
+                  ),
+                ),
+              ));
+            },
+          ),
         ),
-  );
+      );
 }

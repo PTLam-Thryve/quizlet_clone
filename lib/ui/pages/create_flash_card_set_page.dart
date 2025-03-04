@@ -10,14 +10,14 @@ import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
 import 'package:quizlet_clone/ui/widgets/forms/flash_card_set_form.dart';
 import 'package:quizlet_clone/ui/widgets/loading_overlay.dart';
 
-class CreateFlashCardPage extends StatefulWidget {
-  const CreateFlashCardPage({super.key});
+class CreateFlashCardSetPage extends StatefulWidget {
+  const CreateFlashCardSetPage({super.key});
 
   @override
-  State<CreateFlashCardPage> createState() => _CreateFlashCardPageState();
+  State<CreateFlashCardSetPage> createState() => _CreateFlashCardPageState();
 }
 
-class _CreateFlashCardPageState extends State<CreateFlashCardPage> {
+class _CreateFlashCardPageState extends State<CreateFlashCardSetPage> {
   late final CreateFlashCardSetFormBloc _createFlashCardBloc;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -66,7 +66,7 @@ class _CreateFlashCardPageState extends State<CreateFlashCardPage> {
           canPop: !bloc.state.isLoading,
           child: Scaffold(
             appBar: AppBar(
-              title: const Text('Create your Flashcard'),
+              title: const Text('Create your Flashcard set'),
             ),
             body: ListView(
               padding: const EdgeInsets.all(16),
