@@ -8,7 +8,7 @@ import 'package:quizlet_clone/bloc/flash_card_set_list_bloc.dart';
 import 'package:quizlet_clone/data/flash_card_set_service.dart';
 import 'package:quizlet_clone/ui/constants/app_icons.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
-import 'package:quizlet_clone/ui/pages/create_flash_card_page.dart';
+import 'package:quizlet_clone/ui/pages/create_flash_card_set_page.dart';
 import 'package:quizlet_clone/ui/router/app_router.dart';
 import 'package:quizlet_clone/ui/widgets/flash_card_set_list.dart';
 
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                   builder: (context) => ChangeNotifierProvider(
                     create: (_) =>
                         CreateFlashCardSetFormBloc(FlashCardSetService()),
-                    child: CreateFlashCardPage(),
+                    child: CreateFlashCardSetPage(),
                   ),
                 ),
               ));
