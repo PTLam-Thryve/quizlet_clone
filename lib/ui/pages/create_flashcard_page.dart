@@ -1,12 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizlet_clone/bloc/create_bloc/create_flashcard_form_bloc.dart';
 import 'package:quizlet_clone/bloc/create_bloc/create_flashcard_form_bloc_state.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
-import 'package:quizlet_clone/ui/pages/flashcardset_detail_page.dart';
-import 'package:quizlet_clone/ui/router/app_router.dart';
 import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
 import 'package:quizlet_clone/ui/widgets/forms/flashcard_form.dart';
 import 'package:quizlet_clone/ui/widgets/loading_overlay.dart';
@@ -47,12 +44,6 @@ class _CreateFlashcardPageState extends State<CreateFlashcardPage> {
         showAppSnackBar(context,
             message: AppTexts.createFlashcardSuccess,
             status: SnackBarStatus.success);
-        unawaited(
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (_) => FlashCardSetDetailPage(
-                    flashCardSetid: widget.flashCardSetId,
-                  ))),
-        );
       case CreateErrorState errorState:
         showAppSnackBar(
           context,
