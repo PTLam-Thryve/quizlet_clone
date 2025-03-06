@@ -49,7 +49,7 @@ class FlashCardService {
         throw GenericFirestoreException();
       } else {
         return Flashcard(
-          id: flashCardSetId,
+          id: retrievedFlashCard.id,
           question: question,
           answer: answer,
         );
