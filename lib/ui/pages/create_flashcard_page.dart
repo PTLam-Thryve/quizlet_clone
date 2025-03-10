@@ -41,7 +41,7 @@ class _CreateFlashcardPageState extends State<CreateFlashcardPage> {
 
   void createStatusListener() {
     switch (_createFlashcardFormBloc.state) {
-      case CreateSuccessState _:
+      case CreateFlashcardSuccessState _:
         showAppSnackBar(context,
             message: AppTexts.createFlashcardSuccess,
             status: SnackBarStatus.success);
@@ -57,7 +57,7 @@ class _CreateFlashcardPageState extends State<CreateFlashcardPage> {
             ),
           ),
         );
-      case CreateErrorState errorState:
+      case CreateFlashcardErrorState errorState:
         showAppSnackBar(
           context,
           message: errorState.errorMessage,

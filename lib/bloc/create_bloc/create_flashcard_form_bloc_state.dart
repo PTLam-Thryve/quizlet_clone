@@ -3,33 +3,33 @@ import 'package:quizlet_clone/models/flashcard.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
 
 sealed class CreateFlashcardFormBlocState {
-  bool get isSuccessful => this is CreateSuccessState;
+  bool get isSuccessful => this is CreateFlashcardSuccessState;
 
-  bool get isLoading => this is CreateLoadingState;
+  bool get isLoading => this is CreateFlashcardLoadingState;
 }
 
-class CreateInitialState extends CreateFlashcardFormBlocState {}
+class CreateFlashcardFormInitialState extends CreateFlashcardFormBlocState {}
 
-class CreateLoadingState extends CreateFlashcardFormBlocState {}
+class CreateFlashcardLoadingState extends CreateFlashcardFormBlocState {}
 
-class CreateSuccessState extends CreateFlashcardFormBlocState {
-  CreateSuccessState(this.flashcard,);
+class CreateFlashcardSuccessState extends CreateFlashcardFormBlocState {
+  CreateFlashcardSuccessState(this.flashcard,);
 
   final Flashcard flashcard;
 }
 
-class CreateErrorState extends CreateFlashcardFormBlocState {
-  CreateErrorState(this.error);
+class CreateFlashcardErrorState extends CreateFlashcardFormBlocState {
+  CreateFlashcardErrorState(this.error);
 
   final FlashCardServiceException error;
 
   String get errorMessage {
     switch (error) {
-      case InsufficientPermissionException():
+      case FlashCardServicePermissionException():
         return AppTexts.insufficientPermission;
-      case InternalErrorException():
+      case InternalFlashCardServiceException():
         return AppTexts.internalError;
-      case GenericFirestoreException():
+      case GenericFlashCardServiceException():
         return AppTexts.unknownError;
     }
   }
