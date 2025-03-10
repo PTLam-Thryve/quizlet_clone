@@ -6,7 +6,7 @@ import 'package:quizlet_clone/data/flashcard_service.dart';
 class CreateFlashcardFormBloc extends ChangeNotifier {
   CreateFlashcardFormBloc(this._flashCardService);
 
-  CreateFlashcardFormBlocState _state = CreateInitialState();
+  CreateFlashcardFormBlocState _state = CreateFlashcardFormInitialState();
 
   final FlashCardService _flashCardService;
 
@@ -16,7 +16,7 @@ class CreateFlashcardFormBloc extends ChangeNotifier {
       {required String question,
       required String answer,
       required String flashCardSetId}) async {
-    _state = CreateLoadingState();
+    _state = CreateFlashcardLoadingState();
     notifyListeners();
     try {
       final flashCardAdded = await _flashCardService.createFlashcard(
@@ -24,7 +24,7 @@ class CreateFlashcardFormBloc extends ChangeNotifier {
         answer: answer,
         flashCardSetId: flashCardSetId,
       );
-      _state = CreateSuccessState(flashCardAdded);
+      _state = CreateFlashcardSuccessState(flashCardAdded);
     } on FirebaseException catch (error) {
       throw FlashCardServiceException.fromFirebaseException(error);
     } finally{

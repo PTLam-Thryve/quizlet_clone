@@ -24,11 +24,11 @@ class FlashCardListErrorState extends FlashCardListState {
 
   String get errorMessage {
     switch (error) {
-      case InsufficientPermissionException():
+      case FlashCardServicePermissionException():
         return AppTexts.insufficientPermission;
-      case InternalErrorException():
+      case InternalFlashCardServiceException():
         return AppTexts.internalError;
-      case GenericFirestoreException():
+      case GenericFlashCardServiceException():
         return AppTexts.unknownError;
     }
   }

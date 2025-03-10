@@ -44,16 +44,11 @@ class FlashCardService {
         'question': question,
         'answer': answer,
       });
-      final retrievedFlashCard = await addedFlashcard.get();
-      if (!retrievedFlashCard.exists) {
-        throw GenericFirestoreException();
-      } else {
-        return Flashcard(
-          id: retrievedFlashCard.id,
+      return Flashcard(
+          id: addedFlashcard.id,
           question: question,
           answer: answer,
         );
-      }
     } on FirebaseException catch (error) {
       throw FlashCardServiceException.fromFirebaseException(error);
     } catch (error) {
@@ -67,17 +62,17 @@ sealed class FlashCardServiceException implements Exception {
       FirebaseException firebaseException) {
     switch (firebaseException.code) {
       case 'insufficient-permission':
-        return InsufficientPermissionException();
+        return FlashCardServicePermissionException();
       case 'internal-error':
-        return InternalErrorException();
+        return InternalFlashCardServiceException();
       default:
-        return GenericFirestoreException();
+        return GenericFlashCardServiceException();
     }
   }
 }
 
-class InsufficientPermissionException extends FlashCardServiceException {}
+class FlashCardServicePermissionException extends FlashCardServiceException {}
 
-class InternalErrorException extends FlashCardServiceException {}
+class InternalFlashCardServiceException extends FlashCardServiceException {}
 
-class GenericFirestoreException extends FlashCardServiceException {}
+class GenericFlashCardServiceException extends FlashCardServiceException {}
