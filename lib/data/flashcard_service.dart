@@ -17,11 +17,7 @@ class FlashCardService {
             : '';
         final answer =
             doc.data().containsKey('answer') ? doc['answer'].toString() : '';
-        return Flashcard(
-          answer: answer,
-          question: question,
-          id: doc.id
-        );
+        return Flashcard(answer: answer, question: question, id: doc.id);
       }).toList();
       return flashcards;
     } on FirebaseException catch (error) {
@@ -45,10 +41,37 @@ class FlashCardService {
         'answer': answer,
       });
       return Flashcard(
-          id: addedFlashcard.id,
-          question: question,
-          answer: answer,
-        );
+        id: addedFlashcard.id,
+        question: question,
+        answer: answer,
+      );
+    } on FirebaseException catch (error) {
+      throw FlashCardServiceException.fromFirebaseException(error);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<Flashcard> editFlashcard({
+    required String newQuestion,
+    required String newAnswer,
+    required String flashCardSetId,
+    required String flashCardId,
+  }) async {
+    try {
+      var flashcardCollection = _fireStore
+          .collection('flashcard-sets')
+          .doc(flashCardSetId)
+          .collection('flashcards');
+      await flashcardCollection.doc(flashCardId).update({
+        'question': newQuestion,
+        'answer': newAnswer,
+      });
+      return Flashcard(
+        id: flashCardSetId,
+        question: newQuestion,
+        answer: newAnswer,
+      );
     } on FirebaseException catch (error) {
       throw FlashCardServiceException.fromFirebaseException(error);
     } catch (error) {
