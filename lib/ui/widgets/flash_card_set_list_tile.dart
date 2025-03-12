@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:quizlet_clone/bloc/edit_bloc/edit_flash_card_bloc.dart';
 import 'package:quizlet_clone/data/flash_card_set_service.dart';
 import 'package:quizlet_clone/ui/constants/app_icons.dart';
-import 'package:quizlet_clone/ui/pages/edit_flash_card_page.dart';
+import 'package:quizlet_clone/ui/pages/edit_flash_card_set_page.dart';
 
 //Presents a tile of Flashcard from the the Flashcard Set
 class FlashCardSetListTile extends StatelessWidget {
@@ -40,8 +40,8 @@ class FlashCardSetListTile extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => ChangeNotifierProvider(
                     create: (_) => EditFlashCardBloc(FlashCardSetService()),
-                    child: EditFlashCardPage(
-                      flashCardId: flashCardId,
+                    child: EditFlashCardSetPage(
+                      flashCardSetId: flashCardId,
                     ),
                   ),
                 ),

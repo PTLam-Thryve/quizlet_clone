@@ -10,15 +10,15 @@ import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
 import 'package:quizlet_clone/ui/widgets/forms/flash_card_set_form.dart';
 import 'package:quizlet_clone/ui/widgets/loading_overlay.dart';
 
-class EditFlashCardPage extends StatefulWidget {
-  const EditFlashCardPage({required this.flashCardId, super.key});
-  final String flashCardId;
+class EditFlashCardSetPage extends StatefulWidget {
+  const EditFlashCardSetPage({required this.flashCardSetId, super.key});
+  final String flashCardSetId;
 
   @override
-  State<EditFlashCardPage> createState() => _EditFlashCardPageState();
+  State<EditFlashCardSetPage> createState() => _EditFlashCardPageState();
 }
 
-class _EditFlashCardPageState extends State<EditFlashCardPage> {
+class _EditFlashCardPageState extends State<EditFlashCardSetPage> {
   late final EditFlashCardBloc _editFlashCardBloc;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -67,7 +67,7 @@ class _EditFlashCardPageState extends State<EditFlashCardPage> {
           canPop: !bloc.state.isLoading,
           child: Scaffold(
             appBar: AppBar(
-              title: const Text('Edit your Flashcard'),
+              title: const Text('Edit your Flashcard set'),
             ),
             body: ListView(
               padding: const EdgeInsets.all(16),
@@ -90,7 +90,7 @@ class _EditFlashCardPageState extends State<EditFlashCardPage> {
         _editFlashCardBloc.editFlashCardSet(
           newName: _nameController.text,
           newColor: _colorHexController.text,
-          flashCardId: widget.flashCardId,
+          flashCardId: widget.flashCardSetId,
         ),
       );
     }

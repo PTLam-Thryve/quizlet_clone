@@ -38,7 +38,7 @@ class _FlashCardSetDetailPageState extends State<FlashCardSetDetailPage> {
           appBar: AppBar(
             title: const Text('Flashcard Detail Page'),
           ),
-          body: FlashcardList(),
+          body: FlashcardList(flashCardSetId: widget.flashCardSetid,),
           floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add),
             onPressed: () {

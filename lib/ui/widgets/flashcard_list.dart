@@ -6,7 +6,8 @@ import 'package:quizlet_clone/ui/constants/app_texts.dart';
 import 'package:quizlet_clone/ui/widgets/flashcard_list_tile.dart';
 
 class FlashcardList extends StatefulWidget {
-  const FlashcardList({super.key});
+  const FlashcardList({required this.flashCardSetId, super.key});
+  final String flashCardSetId;
 
   @override
   State<FlashcardList> createState() => _FlashcardListState();
@@ -32,7 +33,8 @@ class _FlashcardListState extends State<FlashcardList> {
                         child: FlashcardListTile(
                           question: state.flashcards[index].question,
                           answer: state.flashcards[index].answer,
-                          id: state.flashcards[index].id,
+                          id: widget.flashCardSetId,
+                          flashCardId: state.flashcards[index].id,
                         ),
                       ),
                     );
