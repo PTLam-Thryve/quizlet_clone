@@ -88,6 +88,11 @@ class FlashCardSetService {
       if(flashCardId.isEmpty){
         throw ArgumentError('Flashcard ID is empty!');
       }
+      var flashcardsCollection = collection.doc(flashCardId).collection('flashcards');
+      var flashcardsSnapshot = await flashcardsCollection.get();
+      for(final doc in flashcardsSnapshot.docs){
+        await doc.reference.delete();
+      }
       await collection.doc(flashCardId).delete();
       return FlashCardSet(
         name: name,

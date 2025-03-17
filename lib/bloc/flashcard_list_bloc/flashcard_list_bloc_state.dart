@@ -13,8 +13,10 @@ class FlashCardListInitialState extends FlashCardListState {}
 class FlashCardListLoadingState extends FlashCardListState {}
 
 class FlashCardListSuccessState extends FlashCardListState{
-  FlashCardListSuccessState(this.flashcards);
+  FlashCardListSuccessState({required this.flashcards, this.isFirstLoad = true, this.deletionError});
   final List<Flashcard> flashcards;
+  final bool isFirstLoad;
+  final FlashCardServiceException? deletionError;
 }
 
 class FlashCardListErrorState extends FlashCardListState {

@@ -30,4 +30,6 @@ abstract base class AppTexts {
   static const String flashCardSetEmpty = 'No flashcards found in this set';
   static const String createFlashcardSuccess = 'Flashcard successfully created';
   static const String editFlashcardSuccess = 'Flashcard successfully edited';
+  static const String deleteByIdSuccess = 'Flashcard successfully deleted';
+  static const String deleteByIdError = 'Flashcard could not be deleted';
 }
