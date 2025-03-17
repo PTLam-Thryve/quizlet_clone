@@ -78,6 +78,26 @@ class FlashCardService {
       rethrow;
     }
   }
+
+  Future<Flashcard> deleteFlashcardById({
+    required String question,
+    required String answer,
+    required String flashcardSetId,
+    required String flashcardId,
+  }) async {
+    try{
+      var flashcardCollection = _fireStore
+        .collection('flashcard-sets')
+        .doc(flashcardSetId)
+        .collection('flashcards');
+    await flashcardCollection.doc(flashcardId).delete();
+    return Flashcard(id: flashcardSetId, question: question, answer: answer);
+    } on FirebaseException catch (error) {
+      throw FlashCardServiceException.fromFirebaseException(error);
+    } catch (error) {
+      rethrow;
+    }
+  }
 }
 
 sealed class FlashCardServiceException implements Exception {
