@@ -10,8 +10,9 @@ import 'package:quizlet_clone/ui/widgets/forms/flashcard_form.dart';
 import 'package:quizlet_clone/ui/widgets/loading_overlay.dart';
 
 class CreateFlashcardPage extends StatefulWidget {
-  const CreateFlashcardPage({required this.flashCardSetId, super.key});
+  const CreateFlashcardPage({required this.flashCardSetId, required this.flashCardColorHex, super.key});
   final String flashCardSetId;
+  final String flashCardColorHex;
 
   @override
   State<CreateFlashcardPage> createState() => _CreateFlashcardPageState();
@@ -53,6 +54,7 @@ class _CreateFlashcardPageState extends State<CreateFlashcardPage> {
             MaterialPageRoute(
               builder: (_) => FlashCardSetDetailPage(
                 flashCardSetid: widget.flashCardSetId,
+                flashCardColorHex: widget.flashCardColorHex,
               ),
             ),
           ),

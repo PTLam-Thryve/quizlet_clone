@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:color_hex/color_hex.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizlet_clone/bloc/flashcard_list_bloc/flashcard_list_bloc.dart';
@@ -9,8 +10,9 @@ import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
 import 'package:quizlet_clone/ui/widgets/flashcard_list_tile.dart';
 
 class FlashcardList extends StatefulWidget {
-  const FlashcardList({required this.flashCardSetId, super.key});
+  const FlashcardList({required this.flashCardSetId, required this.flashCardColorHex, super.key});
   final String flashCardSetId;
+  final String flashCardColorHex;
 
   @override
   State<FlashcardList> createState() => _FlashcardListState();
@@ -85,12 +87,13 @@ class _FlashcardListState extends State<FlashcardList> {
                           );
                         },
                         child: Card.outlined(
-                          color: Colors.green[50],
+                          color: widget.flashCardColorHex.convertToColor.withAlpha(50),
                           child: FlashcardListTile(
                             question: state.flashcards[index].question,
                             answer: state.flashcards[index].answer,
                             id: widget.flashCardSetId,
                             flashCardId: state.flashcards[index].id,
+                            flashCardColorHex: widget.flashCardColorHex,
                           ),
                         ),
                       ),

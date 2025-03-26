@@ -9,9 +9,10 @@ import 'package:quizlet_clone/ui/pages/create_flashcard_page.dart';
 import 'package:quizlet_clone/ui/widgets/flashcard_list.dart';
 
 class FlashCardSetDetailPage extends StatefulWidget {
-  const FlashCardSetDetailPage({required this.flashCardSetid, super.key});
+  const FlashCardSetDetailPage({required this.flashCardSetid, required this.flashCardColorHex, super.key});
 
   final String flashCardSetid;
+  final String flashCardColorHex;
 
   @override
   State<FlashCardSetDetailPage> createState() => _FlashCardSetDetailPageState();
@@ -38,7 +39,7 @@ class _FlashCardSetDetailPageState extends State<FlashCardSetDetailPage> {
           appBar: AppBar(
             title: const Text('Flashcard Detail Page'),
           ),
-          body: FlashcardList(flashCardSetId: widget.flashCardSetid,),
+          body: FlashcardList(flashCardSetId: widget.flashCardSetid, flashCardColorHex: widget.flashCardColorHex,),
           floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add),
             onPressed: () {
@@ -47,7 +48,8 @@ class _FlashCardSetDetailPageState extends State<FlashCardSetDetailPage> {
                   builder: (context) => ChangeNotifierProvider(
                     create: (_) => CreateFlashcardFormBloc(FlashCardService()),
                     child: CreateFlashcardPage(
-                        flashCardSetId: widget.flashCardSetid),
+                        flashCardSetId: widget.flashCardSetid,
+                        flashCardColorHex: widget.flashCardColorHex,),
                   ),
                 ),
               ));
