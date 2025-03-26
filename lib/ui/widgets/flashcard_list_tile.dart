@@ -12,6 +12,7 @@ class FlashcardListTile extends StatelessWidget {
     required this.answer,
     required this.id,
     required this.flashCardId,
+    required this.flashCardColorHex,
     super.key,
   });
 
@@ -19,6 +20,7 @@ class FlashcardListTile extends StatelessWidget {
   final String answer;
   final String id;
   final String flashCardId;
+  final String flashCardColorHex;
 
   @override
   Widget build(BuildContext context) => ListTile(
@@ -39,7 +41,8 @@ class FlashcardListTile extends StatelessWidget {
                       create: (_) => EditFlashcardFormBloc(FlashCardService()),
                       child: EditFlashcardPage(
                           flashCardId: flashCardId,
-                          flashCardSetId: id),
+                          flashCardSetId: id,
+                          flashCardColorHex: flashCardColorHex,),
                     ))));
           },
           icon: const Icon(Icons.edit),

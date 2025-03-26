@@ -94,6 +94,7 @@ class _FlashCardSetListState extends State<FlashCardSetList> {
                               create: (_) => FlashCardListBloc(FlashCardService()),
                               child: FlashCardSetDetailPage(
                                     flashCardSetid: state.flashCardSets[index].id,
+                                    flashCardColorHex: state.flashCardSets[index].colorHex,
                                   ),
                             )),
                       ),
