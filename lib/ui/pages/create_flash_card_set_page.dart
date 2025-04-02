@@ -47,6 +47,7 @@ class _CreateFlashCardPageState extends State<CreateFlashCardSetPage> {
           message: AppTexts.createSuccess,
           status: SnackBarStatus.success,
         );
+        Navigator.of(context).pop();
         unawaited(Navigator.of(context).pushReplacementNamed(RouteNames.home));
       case CreateFlashCardErrorState errorState:
         showAppSnackBar(

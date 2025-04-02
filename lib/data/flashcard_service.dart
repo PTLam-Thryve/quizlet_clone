@@ -4,11 +4,11 @@ import 'package:quizlet_clone/models/flashcard.dart';
 class FlashCardService {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
-  Future<List<Flashcard>> getFlashcards(final String flashCardSetid) async {
+  Future<List<Flashcard>> getFlashcards(final String flashCardSetId) async {
     try {
       final getFromCollection = await _fireStore
           .collection('flashcard-sets')
-          .doc(flashCardSetid)
+          .doc(flashCardSetId)
           .collection('flashcards')
           .get();
       final flashcards = getFromCollection.docs.map((doc) {
@@ -21,7 +21,7 @@ class FlashCardService {
             answer: answer,
             question: question,
             id: doc.id,
-            setId: flashCardSetid);
+            setId: flashCardSetId);
       }).toList();
       return flashcards;
     } on FirebaseException catch (error) {
