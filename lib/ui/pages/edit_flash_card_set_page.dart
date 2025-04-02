@@ -48,6 +48,7 @@ class _EditFlashCardPageState extends State<EditFlashCardSetPage> {
           message: AppTexts.editSuccess,
           status: SnackBarStatus.success,
         );
+        Navigator.of(context).pop();
         unawaited(Navigator.of(context).pushReplacementNamed(RouteNames.home));
       case EditFlashCardErrorState errorState:
         showAppSnackBar(
