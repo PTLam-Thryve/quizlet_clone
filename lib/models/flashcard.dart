@@ -5,8 +5,8 @@ class Flashcard {
     required this.answer,
     required this.setId,
   });
-  final String id;//id of the set it belongs to aka FlashcardSetId
+  final String id;//id of a singular flashcard
   final String question;
   final String answer;
-  final String setId;
+  final String setId; //id of the set
 }
