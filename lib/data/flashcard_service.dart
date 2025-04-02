@@ -17,7 +17,11 @@ class FlashCardService {
             : '';
         final answer =
             doc.data().containsKey('answer') ? doc['answer'].toString() : '';
-        return Flashcard(answer: answer, question: question, id: doc.id);
+        return Flashcard(
+            answer: answer,
+            question: question,
+            id: doc.id,
+            setId: flashCardSetid);
       }).toList();
       return flashcards;
     } on FirebaseException catch (error) {
@@ -44,6 +48,7 @@ class FlashCardService {
         id: addedFlashcard.id,
         question: question,
         answer: answer,
+        setId: flashCardSetId,
       );
     } on FirebaseException catch (error) {
       throw FlashCardServiceException.fromFirebaseException(error);
@@ -68,7 +73,8 @@ class FlashCardService {
         'answer': newAnswer,
       });
       return Flashcard(
-        id: flashCardSetId,
+        id: flashCardId,
+        setId: flashCardSetId,
         question: newQuestion,
         answer: newAnswer,
       );
@@ -85,13 +91,18 @@ class FlashCardService {
     required String flashcardSetId,
     required String flashcardId,
   }) async {
-    try{
+    try {
       var flashcardCollection = _fireStore
-        .collection('flashcard-sets')
-        .doc(flashcardSetId)
-        .collection('flashcards');
-    await flashcardCollection.doc(flashcardId).delete();
-    return Flashcard(id: flashcardSetId, question: question, answer: answer);
+          .collection('flashcard-sets')
+          .doc(flashcardSetId)
+          .collection('flashcards');
+      await flashcardCollection.doc(flashcardId).delete();
+      return Flashcard(
+        id: flashcardId,
+        setId: flashcardSetId,
+        question: question,
+        answer: answer,
+      );
     } on FirebaseException catch (error) {
       throw FlashCardServiceException.fromFirebaseException(error);
     } catch (error) {
