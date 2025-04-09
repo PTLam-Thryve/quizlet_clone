@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:quizlet_clone/bloc/edit_bloc/edit_flash_card_bloc.dart';
 import 'package:quizlet_clone/bloc/edit_bloc/edit_flash_card_bloc_state.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
-import 'package:quizlet_clone/ui/router/app_router.dart';
 import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
 import 'package:quizlet_clone/ui/widgets/forms/flash_card_set_form.dart';
 import 'package:quizlet_clone/ui/widgets/loading_overlay.dart';
@@ -49,7 +48,6 @@ class _EditFlashCardPageState extends State<EditFlashCardSetPage> {
           status: SnackBarStatus.success,
         );
         Navigator.of(context).pop();
-        unawaited(Navigator.of(context).pushReplacementNamed(RouteNames.home));
       case EditFlashCardErrorState errorState:
         showAppSnackBar(
           context,

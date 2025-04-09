@@ -2,11 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quizlet_clone/bloc/edit_bloc/edit_flash_card_bloc.dart';
 import 'package:quizlet_clone/bloc/flash_card_set_list_bloc.dart';
 import 'package:quizlet_clone/bloc/flash_card_set_list_bloc_state.dart';
 import 'package:quizlet_clone/bloc/flashcard_list_bloc/flashcard_list_bloc.dart';
+import 'package:quizlet_clone/data/flash_card_set_service.dart';
 import 'package:quizlet_clone/data/flashcard_service.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
+import 'package:quizlet_clone/ui/pages/edit_flash_card_set_page.dart';
 import 'package:quizlet_clone/ui/pages/flashcardset_detail_page.dart';
 import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
 import 'package:quizlet_clone/ui/widgets/flash_card_set_list_tile.dart';
@@ -91,12 +94,15 @@ class _FlashCardSetListState extends State<FlashCardSetList> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (context) => ChangeNotifierProvider(
-                              create: (_) => FlashCardListBloc(FlashCardService()),
-                              child: FlashCardSetDetailPage(
-                                    flashCardSetid: state.flashCardSets[index].id,
-                                    flashCardColorHex: state.flashCardSets[index].colorHex,
+                                  create: (_) =>
+                                      FlashCardListBloc(FlashCardService()),
+                                  child: FlashCardSetDetailPage(
+                                    flashCardSetid:
+                                        state.flashCardSets[index].id,
+                                    flashCardColorHex:
+                                        state.flashCardSets[index].colorHex,
                                   ),
-                            )),
+                                )),
                       ),
                     );
                   },
@@ -104,6 +110,21 @@ class _FlashCardSetListState extends State<FlashCardSetList> {
                     name: state.flashCardSets[index].name,
                     colorHex: state.flashCardSets[index].colorHex,
                     flashCardId: state.flashCardSets[index].id,
+                    onNavigateEditPressed: () => unawaited(
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ChangeNotifierProvider(
+                            create: (_) =>
+                                EditFlashCardBloc(FlashCardSetService()),
+                            child: EditFlashCardSetPage(
+                              flashCardSetId: state.flashCardSets[index].id,
+                            ),
+                          ),
+                        ),
+                      ).then((_){setState(() {
+                        _flashCardSetListBloc.getFlashCardSets();
+                      });}),
+                    ),
                   ),
                 ),
               ),
