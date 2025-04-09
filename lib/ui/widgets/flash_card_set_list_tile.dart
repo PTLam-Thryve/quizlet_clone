@@ -1,12 +1,6 @@
-import 'dart:async';
-
 import 'package:color_hex/color_hex.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:quizlet_clone/bloc/edit_bloc/edit_flash_card_bloc.dart';
-import 'package:quizlet_clone/data/flash_card_set_service.dart';
 import 'package:quizlet_clone/ui/constants/app_icons.dart';
-import 'package:quizlet_clone/ui/pages/edit_flash_card_set_page.dart';
 
 //Presents a tile of Flashcard from the the Flashcard Set
 class FlashCardSetListTile extends StatelessWidget {
@@ -14,11 +8,13 @@ class FlashCardSetListTile extends StatelessWidget {
     required this.name,
     required this.colorHex,
     required this.flashCardId,
+    required this.onNavigateEditPressed,
     super.key,
   });
   final String name;
   final String colorHex;
   final String flashCardId;
+  final VoidCallback onNavigateEditPressed;
 
   //Converts hex code to RGB color for Flutter
   Color hexToColor(String hexCode) => Color(
@@ -34,20 +30,7 @@ class FlashCardSetListTile extends StatelessWidget {
           backgroundColor: colorHex.convertToColor,
         ),
         trailing: IconButton(
-          onPressed: () {
-            unawaited(
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ChangeNotifierProvider(
-                    create: (_) => EditFlashCardBloc(FlashCardSetService()),
-                    child: EditFlashCardSetPage(
-                      flashCardSetId: flashCardId,
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
+          onPressed: onNavigateEditPressed,
           icon: const Icon(AppIcons.edit),
         ),
       );

@@ -65,15 +65,19 @@ class _HomePageState extends State<HomePage> {
           floatingActionButton: FloatingActionButton(
             child: const Icon(AppIcons.add),
             onPressed: () {
-              unawaited(Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ChangeNotifierProvider(
-                    create: (_) =>
-                        CreateFlashCardSetFormBloc(FlashCardSetService()),
-                    child: CreateFlashCardSetPage(),
-                  ),
-                ),
-              ));
+              unawaited(Navigator.of(context)
+                  .push(
+                    MaterialPageRoute(
+                      builder: (context) => ChangeNotifierProvider(
+                        create: (_) =>
+                            CreateFlashCardSetFormBloc(FlashCardSetService()),
+                        child: CreateFlashCardSetPage(),
+                      ),
+                    ),
+                  )
+                  .then((_) => setState(() {
+                        _flashCardListBloc.getFlashCardSets();
+                      })));
             },
           ),
         ),
