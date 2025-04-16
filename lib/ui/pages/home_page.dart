@@ -49,7 +49,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider(
+  Widget build(BuildContext context) {
+    bool isChecked = false;
+    return ChangeNotifierProvider(
         create: (_) => _flashCardListBloc,
         child: Scaffold(
           appBar: AppBar(
@@ -58,10 +60,70 @@ class _HomePageState extends State<HomePage> {
               IconButton(
                 icon: const Icon(AppIcons.singOut),
                 onPressed: () => unawaited(_authenticationBloc.signOut()),
-              )
+              ),
             ],
           ),
-          body: FlashCardSetList(),
+          body: Column(
+            children: [
+              const Expanded(child: FlashCardSetList()),
+              Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(23),
+                    color: Colors.lightBlue.withAlpha(50),
+                  ),
+                  margin: const EdgeInsets.only(bottom: 100),
+                  child: TextButton(
+                    onPressed: () {
+                      //_flashCardListBloc.getFlashCardSets();
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Select 1 or more Categories'),
+                          content: SizedBox(
+                            width: double.maxFinite,
+                            height: double.maxFinite,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: 3,
+                              itemBuilder: (context, index) => CheckboxListTile(
+                                value: isChecked,
+                                title: const Text('text'),
+                                onChanged: (value) {
+                                  setState(){
+                                    value = !isChecked;
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text(
+                                'Cancel',
+                                style: TextStyle(color: Colors.redAccent),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {},
+                              child: const Text('Ok!'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Start Quiz',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           floatingActionButton: FloatingActionButton(
             child: const Icon(AppIcons.add),
             onPressed: () {
@@ -82,4 +144,5 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       );
+  }
 }
