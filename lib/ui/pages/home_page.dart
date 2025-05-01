@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final AuthenticationBloc _authenticationBloc;
   late final FlashCardSetListBloc _flashCardListBloc;
-
+  List<bool> isChecked = List<bool>.filled(3, false);
   @override
   void initState() {
     super.initState();
@@ -49,9 +49,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    bool isChecked = false;
-    return ChangeNotifierProvider(
+  Widget build(BuildContext context) => ChangeNotifierProvider(
         create: (_) => _flashCardListBloc,
         child: Scaffold(
           appBar: AppBar(
@@ -78,21 +76,23 @@ class _HomePageState extends State<HomePage> {
                       //_flashCardListBloc.getFlashCardSets();
                       showDialog(
                         context: context,
-                        builder: (context) => AlertDialog(
+                        builder: (context) => StatefulBuilder(builder: (context, setState)=> AlertDialog(
                           title: const Text('Select 1 or more Categories'),
                           content: SizedBox(
                             width: double.maxFinite,
                             height: double.maxFinite,
                             child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: 3,
+                              itemCount: isChecked.length,
                               itemBuilder: (context, index) => CheckboxListTile(
-                                value: isChecked,
-                                title: const Text('text'),
+                                selected: isChecked[index],
+                                value: isChecked[index],
+                                title: Text('text $index'),
                                 onChanged: (value) {
-                                  setState(){
-                                    value = !isChecked;
-                                  }
+                                  setState((){
+                                    isChecked[index] = value!;
+                                    print('value $index has been changed to $value');
+                                  });
                                 },
                               ),
                             ),
@@ -108,11 +108,13 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                //TODO: navigates to QuizPage
+                              },
                               child: const Text('Ok!'),
                             ),
                           ],
-                        ),
+                        ),),
                       );
                     },
                     child: const Text(
@@ -144,5 +146,4 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       );
-  }
 }
