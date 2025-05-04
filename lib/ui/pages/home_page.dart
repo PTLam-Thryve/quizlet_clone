@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:quizlet_clone/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:quizlet_clone/bloc/create_bloc/create_flash_card_set_form_bloc.dart';
 import 'package:quizlet_clone/bloc/flash_card_set_list_bloc.dart';
+import 'package:quizlet_clone/bloc/flash_card_set_list_bloc_state.dart';
 import 'package:quizlet_clone/data/flash_card_set_service.dart';
 import 'package:quizlet_clone/ui/constants/app_icons.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
@@ -22,8 +23,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final AuthenticationBloc _authenticationBloc;
   late final FlashCardSetListBloc _flashCardListBloc;
-  List<bool> isChecked = List<bool>.filled(3, false);
-  bool isSelected = false;
+  final Set<String> _selectedFlashCardSetIds = <String>{};
 
   @override
   void initState() {
@@ -68,6 +68,9 @@ class _HomePageState extends State<HomePage> {
               const Expanded(child: FlashCardSetList()),
               Consumer<FlashCardSetListBloc>(builder: (_, bloc, __) {
                 if (bloc.state.isSuccessful) {
+                  final flashCardSetList =
+                      (bloc.state as FlashCardSetListSuccessState)
+                          .flashCardSets;
                   return Center(
                     child: Container(
                       decoration: BoxDecoration(
@@ -77,6 +80,8 @@ class _HomePageState extends State<HomePage> {
                       margin: const EdgeInsets.only(bottom: 100),
                       child: TextButton(
                         onPressed: () {
+                          // Reset the selected flash card set IDs
+                          _selectedFlashCardSetIds.clear();
                           unawaited(showDialog(
                             context: context,
                             builder: (context) => StatefulBuilder(
@@ -88,23 +93,27 @@ class _HomePageState extends State<HomePage> {
                                   height: double.maxFinite,
                                   child: ListView.builder(
                                     shrinkWrap: true,
-                                    itemCount: isChecked.length,
-                                    itemBuilder: (context, index) =>
-                                        CheckboxListTile(
-                                      selected: isChecked[index],
-                                      value: isChecked[index],
-                                      title: Text('text $index'),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          isChecked[index] = value!;
-                                          isSelected = isChecked.contains(true);
-                                          print(
-                                              'value $index has been changed to $value');
-                                          print(
-                                              'does isChecked contains true> $isSelected');
-                                        });
-                                      },
-                                    ),
+                                    itemCount: flashCardSetList.length,
+                                    itemBuilder: (_, index) {
+                                      final flashCardSet =
+                                          flashCardSetList[index];
+                                      return CheckboxListTile(
+                                        value: _selectedFlashCardSetIds
+                                            .contains(flashCardSet.id),
+                                        title: Text(flashCardSet.name),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            if (value == true) {
+                                              _selectedFlashCardSetIds
+                                                  .add(flashCardSet.id);
+                                            } else {
+                                              _selectedFlashCardSetIds
+                                                  .remove(flashCardSet.id);
+                                            }
+                                          });
+                                        },
+                                      );
+                                    },
                                   ),
                                 ),
                                 actions: [
@@ -118,14 +127,15 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   TextButton(
-                                    onPressed: isSelected
-                                        ? () {
-                                            //TODO: navigates to QuizPage
-                                          }
-                                        : null,
+                                    onPressed:
+                                        _selectedFlashCardSetIds.isNotEmpty
+                                            ? () {
+                                                //TODO: navigates to QuizPage
+                                              }
+                                            : null,
                                     child: Text(
                                       'Start',
-                                      style: isSelected
+                                      style: _selectedFlashCardSetIds.isNotEmpty
                                           ? const TextStyle(color: Colors.blue)
                                           : const TextStyle(color: Colors.grey),
                                     ),
