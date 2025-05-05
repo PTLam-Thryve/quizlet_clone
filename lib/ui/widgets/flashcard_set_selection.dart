@@ -60,9 +60,13 @@ class _FlashcardSetSelectionState extends State<FlashcardSetSelection> {
             TextButton(
               onPressed: widget.selectedFlashCardSetIds.isNotEmpty
                   ? () {
+                      Navigator.of(context).pop();
                       unawaited(Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => QuizGamePage(),
+                          builder: (context) => QuizGamePage(
+                            selectedFlashCardSetIds:
+                                widget.selectedFlashCardSetIds,
+                          ),
                         ),
                       ));
                     }
