@@ -5,12 +5,14 @@ import 'package:provider/provider.dart';
 import 'package:quizlet_clone/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:quizlet_clone/bloc/create_bloc/create_flash_card_set_form_bloc.dart';
 import 'package:quizlet_clone/bloc/flash_card_set_list_bloc.dart';
+import 'package:quizlet_clone/bloc/flash_card_set_list_bloc_state.dart';
 import 'package:quizlet_clone/data/flash_card_set_service.dart';
 import 'package:quizlet_clone/ui/constants/app_icons.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
 import 'package:quizlet_clone/ui/pages/create_flash_card_set_page.dart';
 import 'package:quizlet_clone/ui/router/app_router.dart';
 import 'package:quizlet_clone/ui/widgets/flash_card_set_list.dart';
+import 'package:quizlet_clone/ui/widgets/flashcard_set_selection.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,6 +24,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final AuthenticationBloc _authenticationBloc;
   late final FlashCardSetListBloc _flashCardListBloc;
+  final Set<String> _selectedFlashCardSetIds = <String>{};
 
   @override
   void initState() {
@@ -58,10 +61,52 @@ class _HomePageState extends State<HomePage> {
               IconButton(
                 icon: const Icon(AppIcons.singOut),
                 onPressed: () => unawaited(_authenticationBloc.signOut()),
-              )
+              ),
             ],
           ),
-          body: FlashCardSetList(),
+          body: Column(
+            children: [
+              const Expanded(child: FlashCardSetList()),
+              Consumer<FlashCardSetListBloc>(builder: (_, bloc, __) {
+                if (bloc.state.isSuccessful) {
+                  final flashCardSetList =
+                      (bloc.state as FlashCardSetListSuccessState)
+                          .flashCardSets;
+                  return Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(23),
+                        color: Colors.lightBlue.withAlpha(50),
+                      ),
+                      margin: const EdgeInsets.only(bottom: 100),
+                      child: TextButton(
+                        onPressed: () {
+                          // Reset the selected flash card set IDs
+                          _selectedFlashCardSetIds.clear();
+                          unawaited(
+                            showDialog(
+                              context: context,
+                              builder: (context) => FlashcardSetSelection(
+                                flashCardSetList: flashCardSetList,
+                                selectedFlashCardSetIds:
+                                    _selectedFlashCardSetIds,
+                              ),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          AppTexts.startQuiz,
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+
+                return const SizedBox.shrink();
+              }),
+            ],
+          ),
           floatingActionButton: FloatingActionButton(
             child: const Icon(AppIcons.add),
             onPressed: () {
