@@ -32,4 +32,8 @@ abstract base class AppTexts {
   static const String editFlashcardSuccess = 'Flashcard successfully edited';
   static const String deleteByIdSuccess = 'Flashcard successfully deleted';
   static const String deleteByIdError = 'Flashcard could not be deleted';
+  static const String start = 'Start';
+  static const String cancel = 'Cancel';
+  static const String startQuiz = 'Start Quiz';
+  static const String quizGameWelcome = 'Welcome to Quiz Game';
 }

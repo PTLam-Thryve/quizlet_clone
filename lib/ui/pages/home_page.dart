@@ -83,71 +83,19 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           // Reset the selected flash card set IDs
                           _selectedFlashCardSetIds.clear();
-                          unawaited(showDialog(
-                            context: context,
-                            builder: (context) => StatefulBuilder(
-                              builder: (context, setState) => AlertDialog(
-                                title:
-                                    const Text('Select 1 or more Categories'),
-                                content: SizedBox(
-                                  width: double.maxFinite,
-                                  height: double.maxFinite,
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: flashCardSetList.length,
-                                    itemBuilder: (_, index) {
-                                      final flashCardSet =
-                                          flashCardSetList[index];
-                                      return CheckboxListTile(
-                                        value: _selectedFlashCardSetIds
-                                            .contains(flashCardSet.id),
-                                        title: Text(flashCardSet.name),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            if (value == true) {
-                                              _selectedFlashCardSetIds
-                                                  .add(flashCardSet.id);
-                                            } else {
-                                              _selectedFlashCardSetIds
-                                                  .remove(flashCardSet.id);
-                                            }
-                                          });
-                                        },
-                                      );
-                                    },
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text(
-                                      'Cancel',
-                                      style: TextStyle(color: Colors.redAccent),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed:
-                                        _selectedFlashCardSetIds.isNotEmpty
-                                            ? () {
-                                                //TODO: navigates to QuizPage
-                                              }
-                                            : null,
-                                    child: Text(
-                                      'Start',
-                                      style: _selectedFlashCardSetIds.isNotEmpty
-                                          ? const TextStyle(color: Colors.blue)
-                                          : const TextStyle(color: Colors.grey),
-                                    ),
-                                  ),
-                                ],
+                          unawaited(
+                            showDialog(
+                              context: context,
+                              builder: (context) => FlashcardSetSelection(
+                                flashCardSetList: flashCardSetList,
+                                selectedFlashCardSetIds:
+                                    _selectedFlashCardSetIds,
                               ),
                             ),
-                          ));
+                          );
                         },
                         child: const Text(
-                          'Start Quiz',
+                          AppTexts.startQuiz,
                           style: TextStyle(fontSize: 18),
                         ),
                       ),
