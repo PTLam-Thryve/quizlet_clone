@@ -5,13 +5,14 @@ import 'package:provider/provider.dart';
 import 'package:quizlet_clone/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:quizlet_clone/bloc/create_bloc/create_flash_card_set_form_bloc.dart';
 import 'package:quizlet_clone/bloc/flash_card_set_list_bloc.dart';
+import 'package:quizlet_clone/bloc/flash_card_set_list_bloc_state.dart';
 import 'package:quizlet_clone/data/flash_card_set_service.dart';
 import 'package:quizlet_clone/ui/constants/app_icons.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
 import 'package:quizlet_clone/ui/pages/create_flash_card_set_page.dart';
 import 'package:quizlet_clone/ui/router/app_router.dart';
-import 'package:quizlet_clone/ui/utils/show_app_snack_bar.dart';
 import 'package:quizlet_clone/ui/widgets/flash_card_set_list.dart';
+import 'package:quizlet_clone/ui/widgets/flashcard_set_selection.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,8 +24,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final AuthenticationBloc _authenticationBloc;
   late final FlashCardSetListBloc _flashCardListBloc;
-  List<bool> isChecked = List<bool>.filled(3, false);
-  bool isSelected = false;
+  final Set<String> _selectedFlashCardSetIds = <String>{};
 
   @override
   void initState() {
@@ -67,81 +67,96 @@ class _HomePageState extends State<HomePage> {
           body: Column(
             children: [
               const Expanded(child: FlashCardSetList()),
-              Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(23),
-                    color: Colors.lightBlue.withAlpha(50),
-                  ),
-                  margin: const EdgeInsets.only(bottom: 100),
-                  child: TextButton(
-                    onPressed: () {
-                      //_flashCardListBloc.getFlashCardSets();
-                      showDialog(
-                        context: context,
-                        builder: (context) => StatefulBuilder(
-                          builder: (context, setState) => AlertDialog(
-                            title: const Text('Select 1 or more Categories'),
-                            content: SizedBox(
-                              width: double.maxFinite,
-                              height: double.maxFinite,
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: isChecked.length,
-                                itemBuilder: (context, index) =>
-                                    CheckboxListTile(
-                                  selected: isChecked[index],
-                                  value: isChecked[index],
-                                  title: Text('text $index'),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      isChecked[index] = value!;
-                                      isSelected = isChecked.contains(true);
-                                      print(
-                                          'value $index has been changed to $value');
-                                      print(
-                                          'does isChecked contains true> $isSelected');
-                                    });
-                                  },
+              Consumer<FlashCardSetListBloc>(builder: (_, bloc, __) {
+                if (bloc.state.isSuccessful) {
+                  final flashCardSetList =
+                      (bloc.state as FlashCardSetListSuccessState)
+                          .flashCardSets;
+                  return Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(23),
+                        color: Colors.lightBlue.withAlpha(50),
+                      ),
+                      margin: const EdgeInsets.only(bottom: 100),
+                      child: TextButton(
+                        onPressed: () {
+                          // Reset the selected flash card set IDs
+                          _selectedFlashCardSetIds.clear();
+                          unawaited(showDialog(
+                            context: context,
+                            builder: (context) => StatefulBuilder(
+                              builder: (context, setState) => AlertDialog(
+                                title:
+                                    const Text('Select 1 or more Categories'),
+                                content: SizedBox(
+                                  width: double.maxFinite,
+                                  height: double.maxFinite,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: flashCardSetList.length,
+                                    itemBuilder: (_, index) {
+                                      final flashCardSet =
+                                          flashCardSetList[index];
+                                      return CheckboxListTile(
+                                        value: _selectedFlashCardSetIds
+                                            .contains(flashCardSet.id),
+                                        title: Text(flashCardSet.name),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            if (value == true) {
+                                              _selectedFlashCardSetIds
+                                                  .add(flashCardSet.id);
+                                            } else {
+                                              _selectedFlashCardSetIds
+                                                  .remove(flashCardSet.id);
+                                            }
+                                          });
+                                        },
+                                      );
+                                    },
+                                  ),
                                 ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text(
+                                      'Cancel',
+                                      style: TextStyle(color: Colors.redAccent),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed:
+                                        _selectedFlashCardSetIds.isNotEmpty
+                                            ? () {
+                                                //TODO: navigates to QuizPage
+                                              }
+                                            : null,
+                                    child: Text(
+                                      'Start',
+                                      style: _selectedFlashCardSetIds.isNotEmpty
+                                          ? const TextStyle(color: Colors.blue)
+                                          : const TextStyle(color: Colors.grey),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text(
-                                  'Cancel',
-                                  style: TextStyle(color: Colors.redAccent),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: isSelected
-                                    ? () {
-                                        //TODO: navigates to QuizPage
-                                      }
-                                    : null,
-                                child: Text(
-                                  'Start',
-                                  style: isSelected
-                                      ? const TextStyle(color: Colors.blue)
-                                      : const TextStyle(
-                                          color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
+                          ));
+                        },
+                        child: const Text(
+                          'Start Quiz',
+                          style: TextStyle(fontSize: 18),
                         ),
-                      );
-                    },
-                    child: const Text(
-                      'Start Quiz',
-                      style: TextStyle(fontSize: 18),
+                      ),
                     ),
-                  ),
-                ),
-              ),
+                  );
+                }
+
+                return const SizedBox.shrink();
+              }),
             ],
           ),
           floatingActionButton: FloatingActionButton(
