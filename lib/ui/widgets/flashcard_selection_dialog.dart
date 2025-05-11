@@ -5,19 +5,18 @@ import 'package:quizlet_clone/models/flash_card_set.dart';
 import 'package:quizlet_clone/ui/constants/app_texts.dart';
 import 'package:quizlet_clone/ui/pages/quiz_game_page.dart';
 
-class FlashcardSetSelection extends StatefulWidget {
-  const FlashcardSetSelection(
+class FlashcardSelectionDialog extends StatefulWidget {
+  FlashcardSelectionDialog(
       {required this.flashCardSetList,
-      required this.selectedFlashCardSetIds,
       super.key});
   final List<FlashCardSet> flashCardSetList;
-  final Set<String> selectedFlashCardSetIds;
+  final Set<String> selectedFlashCardSetIds = <String>{};
 
   @override
-  State<FlashcardSetSelection> createState() => _FlashcardSetSelectionState();
+  State<FlashcardSelectionDialog> createState() => _FlashcardSetSelectionState();
 }
 
-class _FlashcardSetSelectionState extends State<FlashcardSetSelection> {
+class _FlashcardSetSelectionState extends State<FlashcardSelectionDialog> {
   @override
   Widget build(BuildContext context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(

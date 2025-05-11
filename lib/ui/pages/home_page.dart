@@ -12,7 +12,7 @@ import 'package:quizlet_clone/ui/constants/app_texts.dart';
 import 'package:quizlet_clone/ui/pages/create_flash_card_set_page.dart';
 import 'package:quizlet_clone/ui/router/app_router.dart';
 import 'package:quizlet_clone/ui/widgets/flash_card_set_list.dart';
-import 'package:quizlet_clone/ui/widgets/flashcard_set_selection.dart';
+import 'package:quizlet_clone/ui/widgets/flashcard_selection_dialog.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -86,10 +86,8 @@ class _HomePageState extends State<HomePage> {
                           unawaited(
                             showDialog(
                               context: context,
-                              builder: (context) => FlashcardSetSelection(
+                              builder: (context) => FlashcardSelectionDialog(
                                 flashCardSetList: flashCardSetList,
-                                selectedFlashCardSetIds:
-                                    _selectedFlashCardSetIds,
                               ),
                             ),
                           );
