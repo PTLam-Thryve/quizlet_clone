@@ -6,17 +6,17 @@ import 'package:quizlet_clone/ui/constants/app_texts.dart';
 import 'package:quizlet_clone/ui/pages/quiz_game_page.dart';
 
 class FlashcardSelectionDialog extends StatefulWidget {
-  FlashcardSelectionDialog(
+  const FlashcardSelectionDialog(
       {required this.flashCardSetList,
       super.key});
   final List<FlashCardSet> flashCardSetList;
-  final Set<String> selectedFlashCardSetIds = <String>{};
 
   @override
-  State<FlashcardSelectionDialog> createState() => _FlashcardSetSelectionState();
+  State<FlashcardSelectionDialog> createState() => _FlashcardSelectionDialogState();
 }
 
-class _FlashcardSetSelectionState extends State<FlashcardSelectionDialog> {
+class _FlashcardSelectionDialogState extends State<FlashcardSelectionDialog> {
+  final Set<String> selectedFlashCardSetIds = <String>{};
   @override
   Widget build(BuildContext context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
@@ -31,14 +31,14 @@ class _FlashcardSetSelectionState extends State<FlashcardSelectionDialog> {
                 final flashCardSet = widget.flashCardSetList[index];
                 return CheckboxListTile(
                   value:
-                      widget.selectedFlashCardSetIds.contains(flashCardSet.id),
+                      selectedFlashCardSetIds.contains(flashCardSet.id),
                   title: Text(flashCardSet.name),
                   onChanged: (value) {
                     setState(() {
                       if (value == true) {
-                        widget.selectedFlashCardSetIds.add(flashCardSet.id);
+                        selectedFlashCardSetIds.add(flashCardSet.id);
                       } else {
-                        widget.selectedFlashCardSetIds.remove(flashCardSet.id);
+                        selectedFlashCardSetIds.remove(flashCardSet.id);
                       }
                     });
                   },
@@ -57,14 +57,14 @@ class _FlashcardSetSelectionState extends State<FlashcardSelectionDialog> {
               ),
             ),
             TextButton(
-              onPressed: widget.selectedFlashCardSetIds.isNotEmpty
+              onPressed: selectedFlashCardSetIds.isNotEmpty
                   ? () {
                       Navigator.of(context).pop();
                       unawaited(Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => QuizGamePage(
                             selectedFlashCardSetIds:
-                                widget.selectedFlashCardSetIds,
+                                selectedFlashCardSetIds,
                           ),
                         ),
                       ));
@@ -72,7 +72,7 @@ class _FlashcardSetSelectionState extends State<FlashcardSelectionDialog> {
                   : null,
               child: Text(
                 AppTexts.start,
-                style: widget.selectedFlashCardSetIds.isNotEmpty
+                style: selectedFlashCardSetIds.isNotEmpty
                     ? const TextStyle(color: Colors.blue)
                     : const TextStyle(color: Colors.grey),
               ),
