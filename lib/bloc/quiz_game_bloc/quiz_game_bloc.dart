@@ -11,7 +11,7 @@ class QuizGameBloc extends ChangeNotifier {
 
   final QuizGameService _quizGameService;
 
-  Future<void> getQuizFlashcards(
+  Future<void> initQuiz(
       final List<String> flashcardSetIds, final String setId) async {
     _state = QuizGameLoadingState();
     notifyListeners();
