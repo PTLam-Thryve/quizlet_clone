@@ -12,13 +12,13 @@ class QuizGameBloc extends ChangeNotifier {
   final QuizGameService _quizGameService;
 
   Future<void> initQuiz(
-      final List<String> flashcardSetIds, final String setId) async {
+      final List<String> flashcardSetIds) async {
     _state = QuizGameLoadingState();
     notifyListeners();
 
     try {
       final quizFlashcardsReceived =
-          await _quizGameService.getQuizFlashcards(flashcardSetIds, setId);
+          await _quizGameService.getQuizFlashcards(flashcardSetIds);
       _state = QuizGameSuccessState(quizFlashcards: quizFlashcardsReceived);
     } on QuizGameServiceException catch (e) {
       _state = QuizGameErrorState(e);
