@@ -23,7 +23,7 @@ class _QuizGamePageState extends State<QuizGamePage> {
   void initState() {
     super.initState();
     _quizGameBloc = QuizGameBloc(QuizGameService());
-    _quizGameBloc.getQuizFlashcards(
+    _quizGameBloc.initQuiz(
         widget.selectedFlashCardSetIds, widget.setId);
   }
 
