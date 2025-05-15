@@ -9,7 +9,7 @@ class QuizGameService {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   Future<List<QuizFlashcard>> getQuizFlashcards(
-      final List<String> flashcardSetIds, final String setId) async {
+      final List<String> flashcardSetIds) async {
     try {
       final allFlashcardsResult =
           await _fireStore.collectionGroup('flashcards').get();
@@ -18,23 +18,24 @@ class QuizGameService {
                 id: doc.id,
                 question: doc['question'].toString(),
                 answer: doc['answer'].toString(),
-                setId: setId,
               ))
           .toList();
       final filteredFlashcardsBySetId = allFlashcards
-          .where((flashcard) => flashcardSetIds.contains(flashcard.setId))
-          .toList();//compare selected setIds and put them in a list
-
+          .where(flashcardSetIds.contains)
+          .toList();
       final random = Random();
 
       final selectedFlashcards = List<Flashcard>.from(filteredFlashcardsBySetId)
-        ..shuffle(random);//shuffle selected sets
+        ..shuffle(random); //shuffle selected sets
 
-      final quizFlashcards = selectedFlashcards.take(flashcardSetIds.length).map((flashcard) {
+      final quizFlashcards = selectedFlashcards.take(5).map((flashcard) {
         final unrelatedAnswers = selectedFlashcards
-            .where((f) => f.id != flashcard.id)//only ids that are different from the answer's id are selected
+            .where((f) =>
+                f.id !=
+                flashcard
+                    .id) //only ids that are different from the answer's id are selected
             .map((f) => f.answer)
-            .toList()//compare ids of flashcards within those sets
+            .toList() //compare ids of flashcards within those sets
           ..shuffle(random);
         final options = [flashcard.answer, ...unrelatedAnswers.take(2)]
           ..shuffle(random);
@@ -43,7 +44,11 @@ class QuizGameService {
             answer: flashcard.answer,
             options: options);
       }).toList();
-      //print('these flashcards are selected: $quizFlashcards');
+      print('id of selectedSets: $flashcardSetIds');
+      print('all flashcards: $allFlashcards');
+      print('filtered flashcards: $filteredFlashcardsBySetId');
+      print('selected flashcards: $selectedFlashcards');
+      print('quiz flashcards: $quizFlashcards');
       return quizFlashcards;
     } on FirebaseException catch (error) {
       throw FlashCardSetServiceException.fromFirebaseException(error);
@@ -53,9 +58,10 @@ class QuizGameService {
   }
 }
 
-sealed class QuizGameServiceException implements Exception{
-  static QuizGameServiceException fromFirebaseException(FirebaseException firebaseException){
-    switch(firebaseException.code){
+sealed class QuizGameServiceException implements Exception {
+  static QuizGameServiceException fromFirebaseException(
+      FirebaseException firebaseException) {
+    switch (firebaseException.code) {
       case 'insufficient-permission':
         return InsufficientPermissionException();
       case 'internal-error':
@@ -66,10 +72,8 @@ sealed class QuizGameServiceException implements Exception{
   }
 }
 
-class InsufficientPermissionException extends QuizGameServiceException{}
+class InsufficientPermissionException extends QuizGameServiceException {}
 
-class InternalErrorException extends QuizGameServiceException{}
+class InternalErrorException extends QuizGameServiceException {}
 
-class GenericFirestoreException extends QuizGameServiceException{}
-
-
+class GenericFirestoreException extends QuizGameServiceException {}

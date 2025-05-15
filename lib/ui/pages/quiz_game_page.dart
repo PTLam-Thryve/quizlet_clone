@@ -24,7 +24,7 @@ class _QuizGamePageState extends State<QuizGamePage> {
     super.initState();
     _quizGameBloc = QuizGameBloc(QuizGameService());
     _quizGameBloc.initQuiz(
-        widget.selectedFlashCardSetIds, widget.setId);
+        widget.selectedFlashCardSetIds);
   }
 
   @override
