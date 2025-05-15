@@ -30,19 +30,20 @@ class QuizGameService {
       final selectedFlashcards = List<Flashcard>.from(filteredFlashcardsBySetId)
         ..shuffle(random);//shuffle selected sets
 
-      final quizFlashcards = selectedFlashcards.take(5).map((flashcard) {
+      final quizFlashcards = selectedFlashcards.take(flashcardSetIds.length).map((flashcard) {
         final unrelatedAnswers = selectedFlashcards
             .where((f) => f.id != flashcard.id)//only ids that are different from the answer's id are selected
             .map((f) => f.answer)
             .toList()//compare ids of flashcards within those sets
           ..shuffle(random);
-        final options = [flashcard.answer, ...unrelatedAnswers.take(3)]
+        final options = [flashcard.answer, ...unrelatedAnswers.take(2)]
           ..shuffle(random);
         return QuizFlashcard(
             question: flashcard.question,
             answer: flashcard.answer,
             options: options);
       }).toList();
+      //print('these flashcards are selected: $quizFlashcards');
       return quizFlashcards;
     } on FirebaseException catch (error) {
       throw FlashCardSetServiceException.fromFirebaseException(error);
@@ -51,3 +52,24 @@ class QuizGameService {
     }
   }
 }
+
+sealed class QuizGameServiceException implements Exception{
+  static QuizGameServiceException fromFirebaseException(FirebaseException firebaseException){
+    switch(firebaseException.code){
+      case 'insufficient-permission':
+        return InsufficientPermissionException();
+      case 'internal-error':
+        return InternalErrorException();
+      default:
+        return GenericFirestoreException();
+    }
+  }
+}
+
+class InsufficientPermissionException extends QuizGameServiceException{}
+
+class InternalErrorException extends QuizGameServiceException{}
+
+class GenericFirestoreException extends QuizGameServiceException{}
+
+
