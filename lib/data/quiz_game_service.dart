@@ -18,10 +18,11 @@ class QuizGameService {
                 id: doc.id,
                 question: doc['question'].toString(),
                 answer: doc['answer'].toString(),
+                setId: doc['setId'].toString(),
               ))
           .toList();
       final filteredFlashcardsBySetId = allFlashcards
-          .where(flashcardSetIds.contains)
+          .where((flashCard) => flashcardSetIds.contains(flashCard.setId))
           .toList();
       final random = Random();
 
@@ -44,11 +45,6 @@ class QuizGameService {
             answer: flashcard.answer,
             options: options);
       }).toList();
-      print('id of selectedSets: $flashcardSetIds');
-      print('all flashcards: $allFlashcards');
-      print('filtered flashcards: $filteredFlashcardsBySetId');
-      print('selected flashcards: $selectedFlashcards');
-      print('quiz flashcards: $quizFlashcards');
       return quizFlashcards;
     } on FirebaseException catch (error) {
       throw FlashCardSetServiceException.fromFirebaseException(error);
