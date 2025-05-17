@@ -16,7 +16,7 @@ class FlashcardSelectionDialog extends StatefulWidget {
 }
 
 class _FlashcardSelectionDialogState extends State<FlashcardSelectionDialog> {
-  final Set<String> selectedFlashCardSetIds = <String>{};
+  final List<String> selectedFlashCardSetIds = <String>[];
   @override
   Widget build(BuildContext context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
@@ -65,6 +65,7 @@ class _FlashcardSelectionDialogState extends State<FlashcardSelectionDialog> {
                           builder: (context) => QuizGamePage(
                             selectedFlashCardSetIds:
                                 selectedFlashCardSetIds,
+                            setId: selectedFlashCardSetIds.first,
                           ),
                         ),
                       ));

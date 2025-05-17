@@ -24,7 +24,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final AuthenticationBloc _authenticationBloc;
   late final FlashCardSetListBloc _flashCardListBloc;
-  final Set<String> _selectedFlashCardSetIds = <String>{};
+  final List<String> _selectedFlashCardSetIds = <String>[];
 
   @override
   void initState() {
