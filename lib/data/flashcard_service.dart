@@ -43,6 +43,7 @@ class FlashCardService {
           .add({
         'question': question,
         'answer': answer,
+        'setId': flashCardSetId,
       });
       return Flashcard(
         id: addedFlashcard.id,
