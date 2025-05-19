@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:quizlet_clone/data/flash_card_set_service.dart';
 import 'package:quizlet_clone/models/flashcard.dart';
 import 'package:quizlet_clone/models/quiz_flashcard.dart';
 
@@ -38,8 +37,11 @@ class QuizGameService {
             .map((f) => f.answer)
             .toList() //compare ids of flashcards within those sets
           ..shuffle(random);
-        final options = [flashcard.answer, ...unrelatedAnswers.take(2)]
-          ..shuffle(random);
+        final optionsCount = min(2, unrelatedAnswers.length);
+        final options = [
+          flashcard.answer,
+          ...unrelatedAnswers.take(optionsCount)
+        ]..shuffle(random);
         return QuizFlashcard(
             question: flashcard.question,
             answer: flashcard.answer,
@@ -47,7 +49,7 @@ class QuizGameService {
       }).toList();
       return quizFlashcards;
     } on FirebaseException catch (error) {
-      throw FlashCardSetServiceException.fromFirebaseException(error);
+      throw QuizGameServiceException.fromFirebaseException(error);
     } catch (error) {
       rethrow;
     }
