@@ -23,8 +23,7 @@ class _QuizGamePageState extends State<QuizGamePage> {
   void initState() {
     super.initState();
     _quizGameBloc = QuizGameBloc(QuizGameService());
-    _quizGameBloc.initQuiz(
-        widget.selectedFlashCardSetIds);
+    _quizGameBloc.initQuiz(widget.selectedFlashCardSetIds);
   }
 
   @override
@@ -59,10 +58,14 @@ class _QuizGamePageState extends State<QuizGamePage> {
                           trailing: Text(flashcard.answer),
                         );
                       });
-                } else {
-                  return const Center(
-                    child: Text('Nothing here :/'),
+                } else if (bloc.state is QuizGameErrorState) {
+                  final errorMessage =
+                      (bloc.state as QuizGameErrorState).errorMessage;
+                  return Center(
+                    child: Text(errorMessage),
                   );
+                } else{
+                  return const SizedBox.shrink();
                 }
               },
             )),
