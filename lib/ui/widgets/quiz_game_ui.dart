@@ -40,46 +40,48 @@ class _QuizGameUIState extends State<QuizGameUI> {
               ),
             ),
           ),
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: widget.options.length,
-              itemBuilder: (context, index) {
-                final isSelected = _selectedOption == index;
-                final isCorrect = widget.options[index] == widget.correctAnswer;
-                final tileColor = isSelected
-                    ? (isCorrect
-                        ? Colors.green.withAlpha(50)
-                        : Colors.red.withAlpha(50))
-                    : Colors.deepPurple.withAlpha(50);
-                return Center(
-                  child: Container(
-                    margin: const EdgeInsets.all(16),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: tileColor
-                    ),
-                    child: InkWell(
-                      child: ListTile(
-                        title: Text(widget.options[index],
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 20,
-                            )),
-                        tileColor: tileColor,
+          Expanded(
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: widget.options.length,
+                itemBuilder: (context, index) {
+                  final isSelected = _selectedOption == index;
+                  final isCorrect = widget.options[index] == widget.correctAnswer;
+                  final tileColor = isSelected
+                      ? (isCorrect
+                          ? Colors.green.withAlpha(50)
+                          : Colors.red.withAlpha(50))
+                      : Colors.deepPurple.withAlpha(50);
+                  return Center(
+                    child: Container(
+                      margin: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: tileColor
                       ),
-                      onTap: () {
-                        setState(() {
-                          _selectedOption = index;
-                          if (isCorrect) {
-                            widget.onCorrectSelected();
-                          }
-                        });
-                      },
+                      child: InkWell(
+                        child: ListTile(
+                          title: Text(widget.options[index],
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 20,
+                              )),
+                          tileColor: tileColor,
+                        ),
+                        onTap: () {
+                          setState(() {
+                            _selectedOption = index;
+                            if (isCorrect) {
+                              widget.onCorrectSelected();
+                            }
+                          });
+                        },
+                      ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+          ),
         ],
       );
 }
