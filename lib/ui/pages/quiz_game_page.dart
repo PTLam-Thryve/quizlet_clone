@@ -47,9 +47,8 @@ class _QuizGamePageState extends State<QuizGamePage> {
     if (_pageController.page ==
         (_quizGameBloc.state as QuizGameSuccessState).quizFlashcards.length -
             1) {
-      Navigator.of(context).pop();
       unawaited(
-        Navigator.of(context).push(
+        Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => const QuizGameEndPage(),
           ),
