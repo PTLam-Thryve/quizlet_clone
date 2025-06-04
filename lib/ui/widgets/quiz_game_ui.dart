@@ -6,11 +6,13 @@ class QuizGameUI extends StatefulWidget {
       required this.options,
       required this.correctAnswer,
       required this.onCorrectSelected,
+      required this.onIncorrectSelected,
       super.key});
   final String question;
   final List<String> options;
   final String correctAnswer;
   final VoidCallback onCorrectSelected;
+  final VoidCallback onIncorrectSelected;
 
   @override
   State<QuizGameUI> createState() => _QuizGameUIState();
@@ -46,7 +48,8 @@ class _QuizGameUIState extends State<QuizGameUI> {
                 itemCount: widget.options.length,
                 itemBuilder: (context, index) {
                   final isSelected = _selectedOption == index;
-                  final isCorrect = widget.options[index] == widget.correctAnswer;
+                  final isCorrect =
+                      widget.options[index] == widget.correctAnswer;
                   final tileColor = isSelected
                       ? (isCorrect
                           ? Colors.green.withAlpha(50)
@@ -57,9 +60,8 @@ class _QuizGameUIState extends State<QuizGameUI> {
                       margin: const EdgeInsets.all(16),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: tileColor
-                      ),
+                          borderRadius: BorderRadius.circular(10),
+                          color: tileColor),
                       child: InkWell(
                         child: ListTile(
                           title: Text(widget.options[index],
@@ -72,9 +74,9 @@ class _QuizGameUIState extends State<QuizGameUI> {
                         onTap: () {
                           setState(() {
                             _selectedOption = index;
-                            if (isCorrect) {
-                              widget.onCorrectSelected();
-                            }
+                            isCorrect
+                                ? widget.onCorrectSelected()//if isCorrect = true
+                                : widget.onIncorrectSelected();
                           });
                         },
                       ),

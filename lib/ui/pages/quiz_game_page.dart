@@ -24,6 +24,8 @@ class _QuizGamePageState extends State<QuizGamePage> {
   late final QuizGameBloc _quizGameBloc;
   late PageController _pageController;
   final bool canScroll = true;
+  int correctSelected = 0;
+  int incorrectSelected = 0;
 
   @override
   void initState() {
@@ -39,7 +41,14 @@ class _QuizGamePageState extends State<QuizGamePage> {
     _pageController.dispose();
   }
 
-  void _onCorrectAnswerSelected() {
+  void _onCorrectAnswerSelected(bool isCorrect) {
+    setState(() {
+      if (isCorrect) {
+        correctSelected++;
+      } else {
+        incorrectSelected++;
+      }
+    });
     _pageController.nextPage(
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeIn,
@@ -50,7 +59,10 @@ class _QuizGamePageState extends State<QuizGamePage> {
       unawaited(
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => const QuizGameEndPage(),
+            builder: (context) => QuizGameEndPage(
+              correctAmount: correctSelected,
+              incorrectAmount: incorrectSelected,
+            ),
           ),
         ),
       );
@@ -75,14 +87,16 @@ class _QuizGamePageState extends State<QuizGamePage> {
                       (bloc.state as QuizGameSuccessState).quizFlashcards;
                   return PageView(
                       controller: _pageController,
-                      physics: const NeverScrollableScrollPhysics(),
                       onPageChanged: (index) {},
                       children: quizFlashcards
                           .map((flashcard) => QuizGameUI(
                                 question: flashcard.question,
                                 options: flashcard.options,
                                 correctAnswer: flashcard.answer,
-                                onCorrectSelected: _onCorrectAnswerSelected,
+                                onCorrectSelected: () =>
+                                    _onCorrectAnswerSelected(true),
+                                onIncorrectSelected: () =>
+                                    _onCorrectAnswerSelected(false),
                               ))
                           .toList());
                 } else if (bloc.state is QuizGameErrorState) {
