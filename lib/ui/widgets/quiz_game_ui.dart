@@ -72,12 +72,14 @@ class _QuizGameUIState extends State<QuizGameUI> {
                           tileColor: tileColor,
                         ),
                         onTap: () {
-                          setState(() {
-                            _selectedOption = index;
-                            isCorrect
-                                ? widget.onCorrectSelected()//if isCorrect = true
-                                : widget.onIncorrectSelected();
-                          });
+                          setState(
+                            () {
+                              _selectedOption = index;
+                            },
+                          );
+                          isCorrect
+                              ? widget.onCorrectSelected() //if isCorrect = true
+                              : widget.onIncorrectSelected();
                         },
                       ),
                     ),
