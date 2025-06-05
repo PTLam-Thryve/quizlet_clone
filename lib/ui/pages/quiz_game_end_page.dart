@@ -17,11 +17,31 @@ class QuizGameEndPage extends StatefulWidget {
 class _QuizGameEndPageState extends State<QuizGameEndPage> {
   String resultMessage() {
     if (widget.correctAmount == widget.totalQuestions) {
-      return 'Flawless victory!';
+      return 'Perfect!';
     } else if (widget.correctAmount == 0) {
       return 'Oh...';
     } else {
       return 'Better luck next time!';
+    }
+  }
+
+  String resultImageFile() {
+    if (widget.correctAmount == widget.totalQuestions) {
+      return 'lib/asset/result_images/perfect.png';
+    } else if (widget.correctAmount == 0) {
+      return 'lib/asset/result_images/zero.png';
+    } else {
+      return 'lib/asset/result_images/some.png';
+    }
+  }
+
+  Color resultColor(){
+    if (widget.correctAmount == widget.totalQuestions) {
+      return Colors.green.withAlpha(50);
+    } else if (widget.correctAmount == 0) {
+      return Colors.red.withAlpha(70);
+    } else {
+      return Colors.yellow.withAlpha(60);
     }
   }
 
@@ -47,7 +67,7 @@ class _QuizGameEndPageState extends State<QuizGameEndPage> {
                 margin: const EdgeInsets.all(20),
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.green.withAlpha(50),
+                  color: resultColor(),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Text(
@@ -59,7 +79,18 @@ class _QuizGameEndPageState extends State<QuizGameEndPage> {
               ),
             ),
             Center(
-              child: Text(resultMessage()),
+              child: Text(
+                resultMessage(),
+                style: const TextStyle(fontSize: 25),
+              ),
+            ),
+            Center(
+              child: SizedBox(
+                child: Image.asset(
+                  resultImageFile(),
+                  fit: BoxFit.contain,
+                ),
+              ),
             )
           ],
         ),
