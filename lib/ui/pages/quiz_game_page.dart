@@ -62,6 +62,9 @@ class _QuizGamePageState extends State<QuizGamePage> {
             builder: (context) => QuizGameEndPage(
               correctAmount: correctSelected,
               incorrectAmount: incorrectSelected,
+              totalQuestions: (_quizGameBloc.state as QuizGameSuccessState)
+                  .quizFlashcards
+                  .length,
             ),
           ),
         ),
@@ -87,6 +90,7 @@ class _QuizGamePageState extends State<QuizGamePage> {
                       (bloc.state as QuizGameSuccessState).quizFlashcards;
                   return PageView(
                       controller: _pageController,
+                      physics: const NeverScrollableScrollPhysics(),
                       onPageChanged: (index) {},
                       children: quizFlashcards
                           .map((flashcard) => QuizGameUI(
