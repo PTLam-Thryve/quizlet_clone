@@ -16,6 +16,7 @@ dependencies:
     sdk: flutter
   flutter_colorpicker: ^1.1.0
   flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.4
   provider: ^6.1.2
 
 dev_dependencies:
@@ -27,9 +28,18 @@ flutter:
   uses-material-design: true
   assets:
     - lib/asset/result_images/
+    - lib/asset/icon/icon.png
 
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   image_path: "lib/asset/icon/icon.jpg"
   min_sdk_android: 21 # android min sdk min:16, default 21
+
+flutter_native_splash:
+  color: "#fafafa"
+  image: lib/asset/icon/icon.png
+  android_12:
+    image: lib/asset/icon/icon.png
+  android: true
+  ios: true
