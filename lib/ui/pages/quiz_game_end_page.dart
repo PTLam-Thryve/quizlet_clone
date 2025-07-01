@@ -35,7 +35,7 @@ class _QuizGameEndPageState extends State<QuizGameEndPage> {
     }
   }
 
-  Color resultColor(){
+  Color resultColor() {
     if (widget.correctAmount == widget.totalQuestions) {
       return Colors.green.withAlpha(50);
     } else if (widget.correctAmount == 0) {
@@ -47,52 +47,57 @@ class _QuizGameEndPageState extends State<QuizGameEndPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text('Results'),
         ),
-        body: Column(
-          spacing: 40,
-          children: [
-            const Center(
-              child: Text(
-                'Result summary: ',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Center(
-              child: Container(
-                margin: const EdgeInsets.all(20),
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: resultColor(),
-                  borderRadius: BorderRadius.circular(15),
-                ),
+        body: SingleChildScrollView(
+          child: Column(
+            spacing: 40,
+            children: [
+              const Center(
                 child: Text(
-                  '${widget.correctAmount}/${widget.totalQuestions} correct!',
-                  style: const TextStyle(
-                    fontSize: 25,
+                  'Result summary: ',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-            ),
-            Center(
-              child: Text(
-                resultMessage(),
-                style: const TextStyle(fontSize: 25),
-              ),
-            ),
-            Center(
-              child: SizedBox(
-                child: Image.asset(
-                  resultImageFile(),
-                  fit: BoxFit.contain,
+              Center(
+                child: Container(
+                  margin: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: resultColor(),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Text(
+                    '${widget.correctAmount}/${widget.totalQuestions} correct!',
+                    style: const TextStyle(
+                      fontSize: 25,
+                    ),
+                  ),
                 ),
               ),
-            )
-          ],
+              Center(
+                child: Text(
+                  resultMessage(),
+                  style: const TextStyle(fontSize: 25),
+                ),
+              ),
+              Center(
+                child: SizedBox(
+                  height: 300,
+                  width: 300,
+                  child: Image.asset(
+                    resultImageFile(),
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       );
 }
