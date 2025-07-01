@@ -52,6 +52,7 @@ class _QuizGameEndPageState extends State<QuizGameEndPage> {
           title: const Text('Results'),
         ),
         body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
           child: Column(
             spacing: 40,
             children: [
@@ -88,8 +89,8 @@ class _QuizGameEndPageState extends State<QuizGameEndPage> {
               ),
               Center(
                 child: SizedBox(
-                  height: 300,
-                  width: 300,
+                  height: MediaQuery.of(context).size.width*0.85,
+                  width: MediaQuery.of(context).size.width*0.85,
                   child: Image.asset(
                     resultImageFile(),
                     fit: BoxFit.contain,
