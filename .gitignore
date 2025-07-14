@@ -47,13 +47,3 @@ app.*.map.json
 # FVM Version Cache
 .fvm/
 .qodo
-
-# Signing and sensitive files
-key.properties
-*.jks
-
-# Android local files
-android/local.properties
-android/app/local.properties
-android/app/.gradle/
-android/app/.gradle/config.properties

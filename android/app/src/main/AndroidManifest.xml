@@ -1,8 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tom.quizlet">
-    <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="Quizlet Clone"
+        android:label="quizlet_clone"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
